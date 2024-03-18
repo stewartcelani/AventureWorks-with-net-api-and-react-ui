@@ -1,13 +1,16 @@
+using AdventureWorks.Application.Common.Interfaces;
+using AdventureWorks.Contracts.v1;
+using AdventureWorks.Domain.Authentication;
+using AdventureWorks.Domain.Weather;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Identity.Web.Resource;
 
 namespace AdventureWorks.API.Controllers;
 
-[Authorize]
 [ApiController]
-[Route("[controller]")]
-[RequiredScope(RequiredScopesConfigurationKey = "AzureAd:Scopes")]
+[Authorize(Roles = AuthConstants.Roles.Weather.Read)]
+[RequiredScope(RequiredScopesConfigurationKey = "AzureAdSettings:Scopes")]
 public class WeatherForecastController : ControllerBase
 {
     private static readonly string[] Summaries = new[]
@@ -15,15 +18,17 @@ public class WeatherForecastController : ControllerBase
         "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
     };
 
-    private readonly ILogger<WeatherForecastController> _logger;
+    private readonly ILoggerAdapter<WeatherForecastController> _logger;
 
-    public WeatherForecastController(ILogger<WeatherForecastController> logger)
+    public WeatherForecastController(ILoggerAdapter<WeatherForecastController> logger)
     {
         _logger = logger;
     }
 
-    [HttpGet(Name = "GetWeatherForecast")]
-    public IEnumerable<WeatherForecast> Get()
+
+    [Authorize(Roles = AuthConstants.Roles.Weather.Read)]
+    [HttpGet(ApiEndpoints.Weather.GetWeatherForecast.Url, Name = nameof(GetWeatherForecast))]
+    public IEnumerable<WeatherForecast> GetWeatherForecast()
     {
         return Enumerable.Range(1, 5).Select(index => new WeatherForecast
             {

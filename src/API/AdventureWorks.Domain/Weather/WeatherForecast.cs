@@ -1,4 +1,4 @@
-namespace AdventureWorks.API;
+namespace AdventureWorks.Domain.Weather;
 
 public class WeatherForecast
 {
