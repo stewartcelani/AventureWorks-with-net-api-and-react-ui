@@ -1,5 +1,7 @@
+using AdventureWorks.Application.Common.Pipelines;
 using AdventureWorks.Domain;
 using FluentValidation;
+using MediatR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -11,6 +13,10 @@ public static class DependencyInjection
     {
         services.AddValidatorsFromAssemblyContaining<IApplicationMarker>();
         services.AddValidatorsFromAssemblyContaining<IDomainMarker>();
+
+        services.AddMediatR(options => { options.RegisterServicesFromAssemblyContaining(typeof(DependencyInjection)); })
+            .AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
+        // TODO: Add ExecutionContext pipeline behaviour
 
         return services;
     }

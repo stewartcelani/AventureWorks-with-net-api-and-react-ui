@@ -5,9 +5,11 @@
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
         <UserSecretsId>aspnet-AdventureWorks.API-0740C56A-D278-423B-9E08-C7C28BD80381</UserSecretsId>
+        <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="Azure.Identity" Version="1.10.4" />
         <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.17"/>
         <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="7.0.17"/>
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.17"/>
@@ -20,6 +22,12 @@
       <ProjectReference Include="..\AdventureWorks.Contracts\AdventureWorks.Contracts.csproj" />
       <ProjectReference Include="..\AdventureWorks.Domain\AdventureWorks.Domain.csproj" />
       <ProjectReference Include="..\AdventureWorks.Infrastructure\AdventureWorks.Infrastructure.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Include="..\.dockerignore">
+        <Link>.dockerignore</Link>
+      </Content>
     </ItemGroup>
 
 </Project>

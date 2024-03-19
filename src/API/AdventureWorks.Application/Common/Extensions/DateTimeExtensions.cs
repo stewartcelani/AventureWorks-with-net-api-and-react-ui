@@ -25,4 +25,9 @@ public static class DateTimeExtensions
         return new DateTime(dateTime.Year, dateTime.Month, dateTime.Day,
             dateTime.Hour, dateTime.Minute, 0, dateTime.Kind);
     }
+    
+    public static DateOnly ToDateOnly(this DateTime dateTime)
+    {
+        return new DateOnly(dateTime.Year, dateTime.Month, dateTime.Day);
+    }
 }

@@ -4,9 +4,14 @@ public static class AuthConstants
 {
     public static class Roles
     {
-        public static class Weather
+        public static class Employees
         {
-            public const string Read = "Weather.Read";
+            public const string Read = "Employees.Read";
+            public const string Write = "Employees.Write";
         }
+        
+        public const string Administrator = "Administrator";
+        public const string Developer = "Developer";
+        
     }    
 }

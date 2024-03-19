@@ -3,6 +3,7 @@ using AdventureWorks.Application.Common.Interfaces;
 using AdventureWorks.Application.Common.Logging;
 using AdventureWorks.Application.Common.Settings;
 using AdventureWorks.Infrastructure.Common.Data;
+using AdventureWorks.Infrastructure.Employees;
 using FluentValidation;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -37,8 +38,15 @@ public static class DependencyInjection
         var azureAdSettings = SettingsBinder.BindAndValidate<AzureAdSettings, AzureAdSettingsValidator>(configuration);
         services.AddSingleton(azureAdSettings);
         
+        // Connection Strings
+        var connectionStrings = SettingsBinder.BindAndValidate<ConnectionStrings, ConnectionStringsValidator>(configuration);
+        services.AddSingleton(connectionStrings);
+        
         // Dapper wrapper
         services.AddTransient<IDbConnectionFactory, SqlDbConnectionFactory>();
+        
+        // Employee Repository
+        services.AddTransient<IEmployeeRepository, EmployeeRepository>();
         
         return services;
     }

@@ -1,4 +1,5 @@
 using System.Net.Mail;
+using Microsoft.Data.SqlClient;
 
 namespace AdventureWorks.Application.Common.Extensions;
 
@@ -22,13 +23,26 @@ public static class StringExtensions
         }
     }
 
-    public static bool IsValidUri(this string str)
+    public static bool IsValidUri(this string s)
     {
-        return Uri.TryCreate(str, UriKind.Absolute, out _);
+        return Uri.TryCreate(s, UriKind.Absolute, out _);
     }
     
-    public static bool IsValidGuid(this string str)
+    public static bool IsValidGuid(this string s)
     {
-        return Guid.TryParse(str, out _);
+        return Guid.TryParse(s, out _);
+    }
+    
+    public static bool IsValidConnectionString(this string s)
+    {
+        try
+        {
+            new SqlConnectionStringBuilder(s);
+            return true;
+        }
+        catch
+        {
+            return false;
+        }
     }
 }
