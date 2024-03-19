@@ -5,7 +5,13 @@ meta {
 }
 
 get {
-  url: https://localhost:8000/api/v1/employees/
+  url: https://localhost:8000/api/v1/employees/?page=1&pageSize=25&includeTotalCount=true
   body: none
   auth: none
+}
+
+query {
+  page: 1
+  pageSize: 25
+  includeTotalCount: true
 }
