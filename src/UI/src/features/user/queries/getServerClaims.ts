@@ -5,12 +5,7 @@ import { FetchError } from '@errors/authenticationError.ts';
 import { logger } from '@utils/logger.ts';
 
 export async function getServerClaims(): Promise<UserClaims> {
-  logger.emit({
-    timestamp: new Date(),
-    level: 'Error',
-    messageTemplate: 'Fetching user claims',
-    properties: {}
-  });
+  logger.logTrace('Fetching user claims from server');
   const apiClient = await getAuthenticatedApiClient();
   const response = await apiClient.get('users/me');
   const data = await response.json();

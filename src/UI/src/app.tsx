@@ -7,8 +7,6 @@ import { AuthProvider } from '@providers/authProvider.tsx';
 import { authContext } from '@/types/authContext.ts';
 import Router from '@/router';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { logger } from '@utils/logger.ts';
-import { LoggerProvider } from '@providers/loggerProvider.tsx';
 
 const queryClient = new QueryClient();
 
@@ -19,11 +17,9 @@ if (!rootElement.innerHTML) {
     <StrictMode>
       <MsalProvider instance={msalInstance}>
         <AuthProvider authContext={authContext}>
-          <LoggerProvider logger={logger}>
-            <QueryClientProvider client={queryClient}>
-              <Router />
-            </QueryClientProvider>
-          </LoggerProvider>
+          <QueryClientProvider client={queryClient}>
+            <Router />
+          </QueryClientProvider>
         </AuthProvider>
       </MsalProvider>
     </StrictMode>

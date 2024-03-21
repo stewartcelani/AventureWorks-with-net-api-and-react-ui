@@ -3,13 +3,14 @@ import { Outlet } from '@tanstack/react-router';
 import Header from '@components/layout/Header.tsx';
 import LoadingBar from 'react-top-loading-bar';
 import { useUiStore } from '@stores/uiStore.ts';
-import { useLogger } from '@hooks/useLogger.ts';
 import { useEffect } from 'react';
+import { logger } from '@utils/logger.ts';
 
 export default function Layout() {
   const progress = useUiStore((state) => state.topLoadingBarProgress);
   const setProgress = useUiStore((state) => state.setTopLoadingBarProgress);
-  const logger = useLogger();
+
+  logger.logTrace('Layout rendered');
 
   useEffect(() => {
     const errorHandler = (event: ErrorEvent) => {
@@ -37,7 +38,7 @@ export default function Layout() {
     return () => {
       window.removeEventListener('error', errorHandler);
     };
-  }, [logger]);
+  }, []);
 
   return (
     <>

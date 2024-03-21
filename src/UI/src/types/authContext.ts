@@ -2,6 +2,7 @@ import { AccountInfo } from '@azure/msal-browser';
 import { msalInstance } from '@config/authConfig';
 import { AuthenticationError } from '@errors/authenticationError.ts';
 import { type UserClaims, UserClaimsSchema } from '@features/user/types/userClaims.ts';
+import { logger } from '@utils/logger.ts';
 
 export type AuthContext = {
   account: AccountInfo | null;
@@ -22,11 +23,13 @@ export const authContext: AuthContext = {
     if (!user) {
       msalInstance.setActiveAccount(null);
       authContext.account = null;
+      logger.setUser(null);
       return;
     }
     authContext.userClaims = getUserClaimsFromAccountInfo(user);
     msalInstance.setActiveAccount(user);
     authContext.account = user;
+    logger.setUser(authContext.userClaims);
   },
   hasRole: (role: string) => {
     if (!authContext.account || !authContext.account.idTokenClaims || !authContext.account.idTokenClaims.roles) {
