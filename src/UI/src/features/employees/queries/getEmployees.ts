@@ -3,6 +3,7 @@ import { type PagedResponse, pagedResponseSchema } from '@/types/pagedResponse.t
 import { type Employee, employeeSchema } from '@features/employees/types/employee.ts';
 import { employeeRouteDefaults } from '@routes/employees';
 import { useQuery } from '@tanstack/react-query';
+import { FetchError } from '@errors/authenticationError.ts';
 
 const employeesResponseSchema = pagedResponseSchema(employeeSchema);
 

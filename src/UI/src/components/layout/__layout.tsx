@@ -3,10 +3,41 @@ import { Outlet } from '@tanstack/react-router';
 import Header from '@components/layout/Header.tsx';
 import LoadingBar from 'react-top-loading-bar';
 import { useUiStore } from '@stores/uiStore.ts';
+import { useLogger } from '@hooks/useLogger.ts';
+import { useEffect } from 'react';
 
 export default function Layout() {
   const progress = useUiStore((state) => state.topLoadingBarProgress);
   const setProgress = useUiStore((state) => state.setTopLoadingBarProgress);
+  const logger = useLogger();
+
+  useEffect(() => {
+    const errorHandler = (event: ErrorEvent) => {
+      const errorProperties: object = {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-assignment
+        errorType: event.error?.name || 'Unknown',
+        message: event.message,
+        filename: event.filename,
+        lineno: event.lineno,
+        colno: event.colno,
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-assignment
+        stack: event.error?.stack,
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-assignment
+        componentStack: event.error?.componentStack,
+        uri: window.location.href,
+        userAgent: navigator.userAgent,
+        timestamp: new Date().toISOString()
+      };
+
+      logger.logError('{message}', errorProperties);
+    };
+
+    window.addEventListener('error', errorHandler);
+
+    return () => {
+      window.removeEventListener('error', errorHandler);
+    };
+  }, [logger]);
 
   return (
     <>
