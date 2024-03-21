@@ -29,7 +29,7 @@ public static class DependencyInjection
                 policy =>
                 {
                     policy.WithOrigins(
-                        "http://localhost:5173"
+                        "https://localhost:5173"
                     );
                     policy.AllowAnyHeader();
                     policy.AllowAnyMethod();

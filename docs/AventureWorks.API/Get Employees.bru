@@ -5,13 +5,13 @@ meta {
 }
 
 get {
-  url: https://localhost:8000/api/v1/employees/?page=1&pageSize=25&includeTotalCount=true
+  url: https://localhost:8000/api/v1/employees/?page=1&pageSize=5&includeTotalCount=true
   body: none
-  auth: none
+  auth: inherit
 }
 
 query {
   page: 1
-  pageSize: 25
+  pageSize: 5
   includeTotalCount: true
 }

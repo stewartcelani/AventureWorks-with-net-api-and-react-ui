@@ -1,10 +1,7 @@
-using System.Globalization;
 using AdventureWorks.API;
+using AdventureWorks.API.Middleware;
 using AdventureWorks.Application;
 using AdventureWorks.Infrastructure;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Localization;
-using Microsoft.Identity.Web;
 using Serilog;
 
 var environmentName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ??
@@ -27,11 +24,14 @@ builder.Services.AddApplication(configuration);
 builder.Services.AddInfrastructure(configuration);
 builder.Services.AddApi(configuration);
 
+builder.Services.AddOpenApiDocument();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
+    app.UseOpenApi();
     app.UseSwagger();
     app.UseSwaggerUI();
 } 
@@ -48,6 +48,8 @@ app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 app.MapControllers();
 

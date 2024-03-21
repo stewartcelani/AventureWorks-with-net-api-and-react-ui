@@ -5,6 +5,9 @@ public class Employee
     public required int BusinessEntityID { get; init; }
     public required string NationalIDNumber { get; init; }
     public required string LoginID { get; init; }
+    public required string FirstName { get; init; }
+    public required string MiddleName { get; init; }
+    public required string LastName { get; init; }
     public required string JobTitle { get; init; }
     public required DateOnly BirthDate { get; init; }
     public required MartialStatus MaritalStatus { get; init; }

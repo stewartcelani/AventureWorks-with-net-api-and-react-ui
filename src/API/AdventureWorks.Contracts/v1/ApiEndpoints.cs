@@ -25,4 +25,12 @@ public static class ApiEndpoints
             public const string Url = Base + "/employees";
         }
     }
+
+    public static class Users
+    {
+        public static class Me
+        {
+            public const string Url = Base + "/users/me";
+        }
+    }
 }

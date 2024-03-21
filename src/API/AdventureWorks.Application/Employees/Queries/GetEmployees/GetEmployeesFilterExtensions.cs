@@ -27,6 +27,9 @@ public static class GetEmployeesFilterExtensions
             E.BusinessEntityID,
             E.NationalIDNumber,
             E.LoginID,
+            P.FirstName,
+            P.MiddleName,
+            P.LastName,
             E.JobTitle,
             E.BirthDate,
             E.MaritalStatus,
@@ -42,8 +45,9 @@ public static class GetEmployeesFilterExtensions
     
     private static string FromQuery = @"
         FROM HumanResources.Employee E
-        JOIN HumanResources.EmployeeDepartmentHistory EDH ON E.BusinessEntityID = EDH.BusinessEntityID
-        JOIN HumanResources.Department D ON EDH.DepartmentID = D.DepartmentID";
+        INNER JOIN HumanResources.EmployeeDepartmentHistory EDH ON E.BusinessEntityID = EDH.BusinessEntityID AND EDH.EndDate IS NULL
+        INNER JOIN HumanResources.Department D ON EDH.DepartmentID = D.DepartmentID
+        INNER JOIN Person.Person P ON E.BusinessEntityID = P.BusinessEntityID";
     
 
     private static string BuildWhereQuery(this GetEmployeesFilter filter)
