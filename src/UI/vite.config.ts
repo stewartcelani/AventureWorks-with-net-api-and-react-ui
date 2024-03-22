@@ -27,7 +27,7 @@ export default defineConfig({
       '@errors': path.resolve(__dirname, './src/errors'),
       '@customTypes': path.resolve(__dirname, './src/types'),
       '@config': path.resolve(__dirname, './src/config'),
-      '@utils': path.resolve(__dirname, './src/utils'),
+      '@utils': path.resolve(__dirname, './src/lib/utils.ts'),
       '@hooks': path.resolve(__dirname, './src/hooks'),
       "@stores": path.resolve(__dirname, './src/stores'),
       "@features": path.resolve(__dirname, './src/features'),

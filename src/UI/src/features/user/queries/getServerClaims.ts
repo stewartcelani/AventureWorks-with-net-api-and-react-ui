@@ -1,8 +1,8 @@
 import { useQuery } from '@tanstack/react-query';
-import { getAuthenticatedApiClient } from '@utils/authUtils.ts';
 import { UserClaims, UserClaimsSchema } from '@features/user/types/userClaims.ts';
 import { FetchError } from '@errors/authenticationError.ts';
-import { logger } from '@utils/logger.ts';
+import { logger } from '@/lib/logger.ts';
+import { getAuthenticatedApiClient } from '@/lib/apiClient.ts';
 
 export async function getServerClaims(): Promise<UserClaims> {
   logger.logTrace('Fetching user claims from server');

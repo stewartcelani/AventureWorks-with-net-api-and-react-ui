@@ -9,10 +9,11 @@
       "@components/*": ["src/components/*"],
       "@customTypes/*": ["src/types/*"],
       "@routes/*": ["src/routes/*"],
-        "@hooks/*": ["src/hooks/*"],
-        "@utils/*": ["src/utils/*"],
+      "@hooks/*": ["src/hooks/*"],
+      "@lib/*": ["src/lib/"],
       "@stores/*": ["src/stores/*"],
-      "@providers/*": ["src/providers/*"]
+      "@providers/*": ["src/providers/*"],
+      "@utils": ["src/lib/utils.ts"]
     },
     "target": "ES2020",
     "useDefineForClassFields": true,

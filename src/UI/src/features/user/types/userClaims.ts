@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { guidRegex } from '@/utils';
+import { guidRegex } from '@/lib';
 
 export const UserClaimsSchema = z.object({
   id: z.string().regex(guidRegex, {

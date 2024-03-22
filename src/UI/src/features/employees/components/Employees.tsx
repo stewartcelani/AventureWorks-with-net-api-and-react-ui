@@ -7,14 +7,14 @@ import { useQueryClient } from '@tanstack/react-query';
 export default function Employees() {
   const queryClient = useQueryClient();
   const { page, pageSize }: EmployeesSearchParams = EmployeeRoute.useSearch();
-  const { data } = useSuspenseQuery(getEmployeesQueryOptions(page, pageSize));
+  const { data } = useSuspenseQuery(getEmployeesQueryOptions({ page, pageSize }));
 
   return (
     <>
       <h1>Employees</h1>
       <button
         onClick={() => {
-          void queryClient.refetchQueries({ queryKey: getEmployeesQueryOptions(page, pageSize).queryKey });
+          void queryClient.refetchQueries({ queryKey: getEmployeesQueryOptions({ page, pageSize }).queryKey });
         }}
       >
         Refresh

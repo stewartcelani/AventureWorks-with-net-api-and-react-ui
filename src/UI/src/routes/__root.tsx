@@ -1,5 +1,5 @@
 import { createRootRouteWithContext } from '@tanstack/react-router';
-import Layout from '@components/layout/__layout.tsx';
+import Layout from '@components/layout/Layout.tsx';
 import type { QueryClient } from '@tanstack/react-query';
 import type { AuthContext } from '@/types/authContext.ts';
 

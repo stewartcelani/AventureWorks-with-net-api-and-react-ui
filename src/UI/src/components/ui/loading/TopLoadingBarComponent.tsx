@@ -1,6 +1,6 @@
 import { useUiStore } from '@stores/uiStore.ts';
 import { useEffect } from 'react';
-import { randomInt } from '@utils/numberUtils.ts';
+import { randomInt } from '@/lib/numbers.ts';
 
 export default function TopLoadingBarComponent() {
   const progress = useUiStore((state) => state.topLoadingBarProgress);
@@ -16,7 +16,7 @@ export default function TopLoadingBarComponent() {
       }
     };
 
-    let timer: number;
+    let timer: NodeJS.Timeout | undefined;
 
     if (progress < 20) {
       updateProgress();
