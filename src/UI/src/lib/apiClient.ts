@@ -25,7 +25,7 @@ export async function getApiAccessToken(scopes: string[]): Promise<string> {
   const account = msalInstance.getActiveAccount();
   if (!account) {
     throw new AuthenticationError(
-      'No active account! Verify a user has been signed in and setActiveAccount has been called.'
+      'No active account! Verify a settings has been signed in and setActiveAccount has been called.'
     );
   }
 

@@ -1,7 +1,7 @@
 import { AccountInfo } from '@azure/msal-browser';
 import { msalInstance } from '@config/authConfig';
 import { AuthenticationError } from '@errors/authenticationError.ts';
-import { type UserClaims, UserClaimsSchema } from '@features/user/types/userClaims.ts';
+import { type UserClaims, UserClaimsSchema } from '@features/settings/types/userClaims.ts';
 import { logger } from '@/lib/logger.ts';
 
 export type AuthContext = {

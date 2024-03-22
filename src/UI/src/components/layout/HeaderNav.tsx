@@ -3,15 +3,9 @@ import { Route as IndexRoute } from '@/routes';
 import AuthorizeView from '@components/auth/AuthorizeView.tsx';
 import { appRoles } from '@config/authConfig.ts';
 import { Route as EmployeeRoute } from '@routes/employees';
-import { Route as UserRoute } from '@routes/user';
+import { Route as SettingsRoute } from '@routes/settings';
 import { cn } from '@utils';
 import type { HTMLAttributes } from 'react';
-
-const activeProps = {
-  style: {
-    fontWeight: 'bold'
-  }
-};
 
 export default function HeaderNav({ className, ...props }: HTMLAttributes<HTMLElement>) {
   return (
@@ -19,16 +13,26 @@ export default function HeaderNav({ className, ...props }: HTMLAttributes<HTMLEl
       <nav className={cn('flex items-center space-x-4 lg:space-x-6', className)} {...props}>
         <Link
           to={IndexRoute.to}
-          activeProps={activeProps}
           className="text-sm font-medium transition-colors hover:text-primary"
+          activeProps={{
+            className: 'text-foreground'
+          }}
+          inactiveProps={{
+            className: 'text-muted-foreground'
+          }}
         >
           Home
         </Link>
         <AuthorizeView role={appRoles.employeesRead}>
           <Link
             to={EmployeeRoute.to}
-            className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
-            activeProps={activeProps}
+            className="text-sm font-medium transition-colors hover:text-primary"
+            activeProps={{
+              className: 'text-foreground'
+            }}
+            inactiveProps={{
+              className: 'text-muted-foreground'
+            }}
             search={{
               page: 1,
               pageSize: 10
@@ -38,11 +42,16 @@ export default function HeaderNav({ className, ...props }: HTMLAttributes<HTMLEl
           </Link>
         </AuthorizeView>
         <Link
-          to={UserRoute.to}
-          className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
-          activeProps={activeProps}
+          to={SettingsRoute.to}
+          className="text-sm font-medium transition-colors hover:text-primary"
+          activeProps={{
+            className: 'text-foreground'
+          }}
+          inactiveProps={{
+            className: 'text-muted-foreground'
+          }}
         >
-          User
+          Settings
         </Link>
       </nav>
     </header>

@@ -12,7 +12,7 @@
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as IndexImport } from './routes/index'
-import { Route as UserIndexImport } from './routes/user/index'
+import { Route as SettingsIndexImport } from './routes/settings/index'
 import { Route as EmployeesIndexImport } from './routes/employees/index'
 
 // Create/Update Routes
@@ -22,10 +22,12 @@ const IndexRoute = IndexImport.update({
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/index.lazy').then((d) => d.Route))
 
-const UserIndexRoute = UserIndexImport.update({
-  path: '/user/',
+const SettingsIndexRoute = SettingsIndexImport.update({
+  path: '/settings/',
   getParentRoute: () => rootRoute,
-} as any).lazy(() => import('./routes/user/index.lazy').then((d) => d.Route))
+} as any).lazy(() =>
+  import('./routes/settings/index.lazy').then((d) => d.Route),
+)
 
 const EmployeesIndexRoute = EmployeesIndexImport.update({
   path: '/employees/',
@@ -46,8 +48,8 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EmployeesIndexImport
       parentRoute: typeof rootRoute
     }
-    '/user/': {
-      preLoaderRoute: typeof UserIndexImport
+    '/settings/': {
+      preLoaderRoute: typeof SettingsIndexImport
       parentRoute: typeof rootRoute
     }
   }
@@ -58,7 +60,7 @@ declare module '@tanstack/react-router' {
 export const routeTree = rootRoute.addChildren([
   IndexRoute,
   EmployeesIndexRoute,
-  UserIndexRoute,
+  SettingsIndexRoute,
 ])
 
 /* prettier-ignore-end */

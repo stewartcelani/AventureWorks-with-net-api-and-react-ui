@@ -4,7 +4,7 @@ import { getEmployeesQueryOptions } from '@features/employees/queries/getEmploye
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { useQueryClient } from '@tanstack/react-query';
 
-export default function Employees() {
+export default function EmployeesPage() {
   const queryClient = useQueryClient();
   const { page, pageSize }: EmployeesSearchParams = EmployeeRoute.useSearch();
   const { data } = useSuspenseQuery(getEmployeesQueryOptions({ page, pageSize }));

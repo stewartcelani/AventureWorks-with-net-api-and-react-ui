@@ -1,6 +1,6 @@
 import seq, { Logger as SeqLogger } from 'seq-logging';
 import { v4 as uuidv4 } from 'uuid';
-import type { UserClaims } from '@features/user/types/userClaims.ts';
+import type { UserClaims } from '@features/settings/types/userClaims.ts';
 
 const loggerInstance = new seq.Logger({
   serverUrl: 'https://seq.stewartcelani.com:5050/',
