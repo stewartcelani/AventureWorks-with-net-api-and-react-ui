@@ -1,8 +1,8 @@
-import { Route as EmployeeRoute, type EmployeesSearchParams } from '@routes/employees';
 import { Link } from '@tanstack/react-router';
+import { useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
+
 import { getEmployeesQueryOptions } from '@features/employees/queries/getEmployees.ts';
-import { useSuspenseQuery } from '@tanstack/react-query';
-import { useQueryClient } from '@tanstack/react-query';
+import { Route as EmployeeRoute, type EmployeesSearchParams } from '@routes/employees.index.tsx';
 
 export default function EmployeesPage() {
   const queryClient = useQueryClient();

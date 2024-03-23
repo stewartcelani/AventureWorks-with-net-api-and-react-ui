@@ -1,8 +1,8 @@
 import { ReactNode, useEffect } from 'react';
 import { AuthenticatedTemplate, UnauthenticatedTemplate, useMsal, useMsalAuthentication } from '@azure/msal-react';
+import { InteractionRequiredAuthError, InteractionType } from '@azure/msal-browser';
 import { AuthContext as AuthContextType } from '@/types/authContext.ts';
 import { AuthContext } from '@/hooks/useAuth';
-import { InteractionRequiredAuthError, InteractionType } from '@azure/msal-browser';
 
 interface AuthProviderProps {
   authContext: AuthContextType;

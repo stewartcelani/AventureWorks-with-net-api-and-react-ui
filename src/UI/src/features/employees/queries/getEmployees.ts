@@ -1,6 +1,6 @@
+import { useQuery } from '@tanstack/react-query';
 import { type PagedResponse, pagedResponseSchema } from '@/types/pagedResponse.ts';
 import { type Employee, employeeSchema } from '@features/employees/types/employee.ts';
-import { useQuery } from '@tanstack/react-query';
 import { getAuthenticatedApiClient } from '@/lib/apiClient.ts';
 
 const employeesResponseSchema = pagedResponseSchema(employeeSchema);

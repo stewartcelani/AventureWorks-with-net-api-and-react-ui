@@ -6,7 +6,7 @@
     "moduleResolution": "bundler",
     "allowSyntheticDefaultImports": true,
     "strict": true,
-    "sourceMap": true,
+    "sourceMap": true
   },
   "include": ["vite.config.ts"]
 }

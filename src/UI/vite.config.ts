@@ -1,24 +1,19 @@
-import { defineConfig } from 'vite'
-import { TanStackRouterVite } from '@tanstack/router-vite-plugin'
-import react from '@vitejs/plugin-react'
+import { defineConfig } from 'vite';
+import { TanStackRouterVite } from '@tanstack/router-vite-plugin';
+import react from '@vitejs/plugin-react';
 import fs from 'fs';
-import path from 'path'
+import path from 'path';
 import { nodePolyfills } from 'vite-plugin-node-polyfills';
-
 
 // https://vitejs.dev/config/
 export default defineConfig({
   server: {
     https: {
       key: fs.readFileSync(path.resolve(__dirname, 'localhost-key.pem')),
-      cert: fs.readFileSync(path.resolve(__dirname, 'localhost.pem')),
-    },
+      cert: fs.readFileSync(path.resolve(__dirname, 'localhost.pem'))
+    }
   },
-  plugins: [
-    react(),
-    TanStackRouterVite(),
-    nodePolyfills({ include: ['http','https','url','buffer','process']})
-  ],
+  plugins: [react(), TanStackRouterVite(), nodePolyfills({ include: ['http', 'https', 'url', 'buffer', 'process'] })],
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
@@ -29,9 +24,10 @@ export default defineConfig({
       '@config': path.resolve(__dirname, './src/config'),
       '@utils': path.resolve(__dirname, './src/lib/utils.ts'),
       '@hooks': path.resolve(__dirname, './src/hooks'),
-      "@stores": path.resolve(__dirname, './src/stores'),
-      "@features": path.resolve(__dirname, './src/features'),
-      "@providers": path.resolve(__dirname, './src/providers'),
-    },
-  },
-})
+      '@stores': path.resolve(__dirname, './src/stores'),
+      '@lib': path.resolve(__dirname, './src/lib'),
+      '@features': path.resolve(__dirname, './src/features'),
+      '@providers': path.resolve(__dirname, './src/providers')
+    }
+  }
+});

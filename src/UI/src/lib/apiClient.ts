@@ -1,6 +1,6 @@
 import ky, { type KyInstance } from 'ky';
-import { appScopes, msalInstance } from '@config/authConfig';
 import { AuthenticationResult, InteractionRequiredAuthError, SilentRequest } from '@azure/msal-browser';
+import { appScopes, msalInstance } from '@config/authConfig';
 import { AuthenticationError } from '@errors/authenticationError.ts';
 import { apiBaseUrl } from '@config/apiConfig.cs.ts';
 

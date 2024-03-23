@@ -11,29 +11,49 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as SettingsImport } from './routes/settings'
 import { Route as IndexImport } from './routes/index'
-import { Route as SettingsIndexImport } from './routes/settings/index'
-import { Route as EmployeesIndexImport } from './routes/employees/index'
+import { Route as SettingsIndexImport } from './routes/settings.index'
+import { Route as EmployeesIndexImport } from './routes/employees.index'
+import { Route as SettingsClaimsIndexImport } from './routes/settings.claims.index'
+import { Route as SettingsAppearanceIndexImport } from './routes/settings.appearance.index'
 
 // Create/Update Routes
+
+const SettingsRoute = SettingsImport.update({
+  path: '/settings',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const IndexRoute = IndexImport.update({
   path: '/',
   getParentRoute: () => rootRoute,
-} as any).lazy(() => import('./routes/index.lazy').then((d) => d.Route))
+} as any)
 
 const SettingsIndexRoute = SettingsIndexImport.update({
-  path: '/settings/',
-  getParentRoute: () => rootRoute,
-} as any).lazy(() =>
-  import('./routes/settings/index.lazy').then((d) => d.Route),
-)
+  path: '/',
+  getParentRoute: () => SettingsRoute,
+} as any)
 
 const EmployeesIndexRoute = EmployeesIndexImport.update({
   path: '/employees/',
   getParentRoute: () => rootRoute,
 } as any).lazy(() =>
-  import('./routes/employees/index.lazy').then((d) => d.Route),
+  import('./routes/employees.index.lazy').then((d) => d.Route),
+)
+
+const SettingsClaimsIndexRoute = SettingsClaimsIndexImport.update({
+  path: '/claims/',
+  getParentRoute: () => SettingsRoute,
+} as any).lazy(() =>
+  import('./routes/settings.claims.index.lazy').then((d) => d.Route),
+)
+
+const SettingsAppearanceIndexRoute = SettingsAppearanceIndexImport.update({
+  path: '/appearance/',
+  getParentRoute: () => SettingsRoute,
+} as any).lazy(() =>
+  import('./routes/settings.appearance.index.lazy').then((d) => d.Route),
 )
 
 // Populate the FileRoutesByPath interface
@@ -44,13 +64,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexImport
       parentRoute: typeof rootRoute
     }
+    '/settings': {
+      preLoaderRoute: typeof SettingsImport
+      parentRoute: typeof rootRoute
+    }
     '/employees/': {
       preLoaderRoute: typeof EmployeesIndexImport
       parentRoute: typeof rootRoute
     }
     '/settings/': {
       preLoaderRoute: typeof SettingsIndexImport
-      parentRoute: typeof rootRoute
+      parentRoute: typeof SettingsImport
+    }
+    '/settings/appearance/': {
+      preLoaderRoute: typeof SettingsAppearanceIndexImport
+      parentRoute: typeof SettingsImport
+    }
+    '/settings/claims/': {
+      preLoaderRoute: typeof SettingsClaimsIndexImport
+      parentRoute: typeof SettingsImport
     }
   }
 }
@@ -59,8 +91,12 @@ declare module '@tanstack/react-router' {
 
 export const routeTree = rootRoute.addChildren([
   IndexRoute,
+  SettingsRoute.addChildren([
+    SettingsIndexRoute,
+    SettingsAppearanceIndexRoute,
+    SettingsClaimsIndexRoute,
+  ]),
   EmployeesIndexRoute,
-  SettingsIndexRoute,
 ])
 
 /* prettier-ignore-end */

@@ -1,5 +1,5 @@
-import { useUiStore } from '@stores/uiStore.ts';
 import { useEffect } from 'react';
+import { useUiStore } from '@stores/uiStore.ts';
 import { randomInt } from '@/lib/numbers.ts';
 
 export default function TopLoadingBarComponent() {
