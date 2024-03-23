@@ -8,6 +8,14 @@ import { nodePolyfills } from 'vite-plugin-node-polyfills';
 // https://vitejs.dev/config/
 export default defineConfig({
   server: {
+    port: 5173,
+    https: {
+      key: fs.readFileSync(path.resolve(__dirname, 'localhost-key.pem')),
+      cert: fs.readFileSync(path.resolve(__dirname, 'localhost.pem'))
+    }
+  },
+  preview: {
+    port: 5173,
     https: {
       key: fs.readFileSync(path.resolve(__dirname, 'localhost-key.pem')),
       cert: fs.readFileSync(path.resolve(__dirname, 'localhost.pem'))
@@ -29,5 +37,8 @@ export default defineConfig({
       '@features': path.resolve(__dirname, './src/features'),
       '@providers': path.resolve(__dirname, './src/providers')
     }
+  },
+  build: {
+    target: 'esnext' //browsers can handle the latest ES features
   }
 });

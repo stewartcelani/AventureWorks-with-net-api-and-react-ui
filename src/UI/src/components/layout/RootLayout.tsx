@@ -7,7 +7,7 @@ import { useUiStore } from '@stores/uiStore.ts';
 import { logger } from '@/lib/logger.ts';
 import { ThemeToggle } from '@components/layout/ThemeToggle.tsx';
 import { Input } from '@components/ui/input.tsx';
-import { theme, useTheme } from '@providers/ThemeProvider.tsx';
+import { useTheme } from '@providers/ThemeProvider.tsx';
 
 export default function RootLayout() {
   const progress = useUiStore((state) => state.topLoadingBarProgress);
@@ -49,7 +49,7 @@ export default function RootLayout() {
       <LoadingBar height={1} color="rgb(39, 39, 42)" progress={progress} onLoaderFinished={() => setProgress(0)} />
       <div className="border-b">
         <div className="flex h-16 items-center px-4">
-          <Link to="/" className="flex items-center space-x-2">
+          <Link to="/" className="mr-3 flex items-center space-x-2">
             <svg
               className="size-6"
               xmlns="http://www.w3.org/2000/svg"
@@ -68,17 +68,17 @@ export default function RootLayout() {
             <span className="hidden font-bold sm:inline-block">AW</span>
           </Link>
           <HeaderNav className="mx-6" />
-          <div className="ml-auto flex items-center space-x-4">
+          <div className="ml-auto hidden items-center space-x-4 md:flex">
             <div>
-              <Input type="search" placeholder="Search..." className="md:w-[100px] lg:w-[300px]" />
+              <Input type="search" placeholder="Search..." className="md:w-[150px] lg:w-[300px]" />
             </div>
-            <ThemeToggle />
-            {/*<Search />
-            <UserNav />*/}
+            {/* <ThemeToggle /> */}
           </div>
         </div>
       </div>
-      <Outlet />
+      <div className="space-y-6 p-10 pb-16 pt-7 md:block ">
+        <Outlet />
+      </div>
       <TanStackRouterDevtools />
     </>
   );

@@ -1,34 +1,38 @@
-import { Link } from '@tanstack/react-router';
+import { Link, useRouterState } from '@tanstack/react-router';
 import type { HTMLAttributes } from 'react';
 import { Route as IndexRoute } from '@/routes';
 import AuthorizeView from '@components/auth/AuthorizeView.tsx';
 import { appRoles } from '@config/authConfig.ts';
 import { Route as EmployeeRoute } from '@routes/employees.index.tsx';
-import { Route as SettingsRoute } from '@routes/settings.index.tsx';
+import { Route as SettingsClaimsRoute } from '@routes/settings.claims.index.tsx';
 import { cn } from '@utils';
 
 export default function HeaderNav({ className, ...props }: HTMLAttributes<HTMLElement>) {
+  const {
+    location: { pathname }
+  } = useRouterState();
+
   return (
     <header>
       <nav className={cn('flex items-center space-x-4 lg:space-x-6', className)} {...props}>
         <Link
           to={IndexRoute.to}
-          className="px-1.5 text-sm font-medium transition-colors hover:text-primary"
+          className="px-1.5 text-sm font-medium transition-colors hover:text-foreground/90"
           activeProps={{
-            className: 'text-foreground'
+            className: 'text-primary'
           }}
           inactiveProps={{
             className: 'text-muted-foreground'
           }}
         >
-          Home
+          Dashboard
         </Link>
         <AuthorizeView role={appRoles.employeesRead}>
           <Link
             to={EmployeeRoute.to}
-            className="px-1.5 text-sm font-medium transition-colors hover:text-primary"
+            className="px-1.5 text-sm font-medium transition-colors hover:text-foreground/90"
             activeProps={{
-              className: 'text-foreground'
+              className: 'text-primary'
             }}
             inactiveProps={{
               className: 'text-muted-foreground'
@@ -42,14 +46,11 @@ export default function HeaderNav({ className, ...props }: HTMLAttributes<HTMLEl
           </Link>
         </AuthorizeView>
         <Link
-          to={SettingsRoute.to}
-          className="px-1.5 text-sm font-medium transition-colors hover:text-primary"
-          activeProps={{
-            className: 'text-foreground'
-          }}
-          inactiveProps={{
-            className: 'text-muted-foreground'
-          }}
+          to={SettingsClaimsRoute.to}
+          className={cn(
+            'px-1.5 text-sm font-medium transition-colors hover:text-foreground/90',
+            pathname.startsWith('/settings/') ? 'text-primary' : 'text-muted-foreground'
+          )}
         >
           Settings
         </Link>
