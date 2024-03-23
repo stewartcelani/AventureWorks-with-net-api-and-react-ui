@@ -1,10 +1,10 @@
 using FluentValidation;
 
-namespace AdventureWorks.Application.Employees.Queries.GetEmployeeByBusinessEntityID;
+namespace AdventureWorks.Application.Employees.Queries.GetEmployeeById;
 
-public class GetEmployeeByBusinessEntityIdQueryValidator : AbstractValidator<GetEmployeeByBusinessEntityIdQuery>
+public class GetEmployeeByIdQueryValidator : AbstractValidator<GetEmployeeByIdQuery>
 {
-    public GetEmployeeByBusinessEntityIdQueryValidator()
+    public GetEmployeeByIdQueryValidator()
     {
         RuleFor(v => v.BusinessEntityID)
             .NotEmpty()

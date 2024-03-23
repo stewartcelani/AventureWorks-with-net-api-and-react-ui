@@ -1,9 +1,9 @@
+using AdventureWorks.Application.Common.Domain;
 using AdventureWorks.Domain.Employees;
 
 namespace AdventureWorks.Application.Employees.Queries.GetEmployees;
 
-public class GetEmployeesQueryResponse
+public class GetEmployeesQueryResponse :GetManyQueryResponse<Employee>
 {
-    public required List<Employee> Employees { get; init; }
-    public int? TotalCount { get; set; }
+    
 }

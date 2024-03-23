@@ -1,4 +1,6 @@
+using AdventureWorks.Application.Common.Domain;
 using AdventureWorks.Application.Common.Interfaces;
+using AdventureWorks.Domain.Employees;
 using MediatR;
 using ErrorOr;
 

@@ -5,7 +5,7 @@ export default function DashboardPage() {
   const authContext = useAuth();
 
   return (
-    <div className="space-y-6 p-10 pb-16 pt-7">
+    <>
       <div className="mb-6 flex items-center justify-between">
         <h2 className="text-3xl font-bold tracking-tight">Dashboard</h2>
       </div>
@@ -28,6 +28,6 @@ export default function DashboardPage() {
         <TabsContent value="reports">Reports here.</TabsContent>
         <TabsContent value="notifications">Notifications here.</TabsContent>
       </Tabs>
-    </div>
+    </>
   );
 }

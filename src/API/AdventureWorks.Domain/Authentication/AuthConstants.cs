@@ -10,6 +10,12 @@ public static class AuthConstants
             public const string Write = "Employees.Write";
         }
         
+        public static class Products
+        {
+            public const string Read = "Products.Read";
+            public const string Write = "Products.Write";
+        }
+        
         public const string Administrator = "Administrator";
         public const string Developer = "Developer";
         

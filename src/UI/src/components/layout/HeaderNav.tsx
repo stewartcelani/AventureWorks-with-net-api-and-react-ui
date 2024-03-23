@@ -5,7 +5,11 @@ import AuthorizeView from '@components/auth/AuthorizeView.tsx';
 import { appRoles } from '@config/authConfig.ts';
 import { Route as EmployeeRoute } from '@routes/employees.index.tsx';
 import { Route as SettingsClaimsRoute } from '@routes/settings.claims.index.tsx';
+import { Route as ProductsRoute } from '@routes/products.index.tsx';
 import { cn } from '@utils';
+import { defaultGetProductsRequest } from '@features/products/queries/getProducts.ts';
+import { defaultGetEmployeesRequest } from '@/features/employees/queries/getEmployees';
+
 
 export default function HeaderNav({ className, ...props }: HTMLAttributes<HTMLElement>) {
   const {
@@ -17,29 +21,47 @@ export default function HeaderNav({ className, ...props }: HTMLAttributes<HTMLEl
       <nav className={cn('flex items-center space-x-4 lg:space-x-6', className)} {...props}>
         <Link
           to={IndexRoute.to}
-          className="px-1.5 text-sm font-medium transition-colors hover:text-foreground/90"
+          className="px-1.5 text-sm font-medium transition-colors"
           activeProps={{
             className: 'text-primary'
           }}
           inactiveProps={{
-            className: 'text-muted-foreground'
+            className: 'text-muted-foreground hover:text-foreground/90'
           }}
         >
           Dashboard
         </Link>
+        <AuthorizeView role={appRoles.productsRead}>
+            <Link
+              to={ProductsRoute.to}
+              className="px-1.5 text-sm font-medium transition-colors"
+              activeProps={{
+                className: 'text-primary'
+              }}
+              inactiveProps={{
+                className: 'text-muted-foreground hover:text-foreground/90'
+              }}
+              search={{
+                page: defaultGetProductsRequest.page,
+                pageSize: defaultGetProductsRequest.pageSize
+              }}
+            >
+              Products
+          </Link>
+        </AuthorizeView>
         <AuthorizeView role={appRoles.employeesRead}>
           <Link
             to={EmployeeRoute.to}
-            className="px-1.5 text-sm font-medium transition-colors hover:text-foreground/90"
+            className="px-1.5 text-sm font-medium transition-colors"
             activeProps={{
               className: 'text-primary'
             }}
             inactiveProps={{
-              className: 'text-muted-foreground'
+              className: 'text-muted-foreground hover:text-foreground/90'
             }}
             search={{
-              page: 1,
-              pageSize: 10
+              page: defaultGetEmployeesRequest.page,
+              pageSize: defaultGetEmployeesRequest.pageSize
             }}
           >
             Employees
@@ -48,8 +70,8 @@ export default function HeaderNav({ className, ...props }: HTMLAttributes<HTMLEl
         <Link
           to={SettingsClaimsRoute.to}
           className={cn(
-            'px-1.5 text-sm font-medium transition-colors hover:text-foreground/90',
-            pathname.startsWith('/settings/') ? 'text-primary' : 'text-muted-foreground'
+            'px-1.5 text-sm font-medium transition-colors',
+            pathname.startsWith('/settings/') ? 'text-primary' : 'text-muted-foreground hover:text-foreground/90'
           )}
         >
           Settings

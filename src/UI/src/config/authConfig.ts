@@ -13,13 +13,17 @@ type AppRoles = {
   developer: string;
   employeesRead: string;
   employeesWrite: string;
+  productsRead: string;
+  productsWrite: string;
 };
 
 export const appRoles: AppRoles = {
   administrator: 'Administrator',
   developer: 'Developer',
   employeesRead: 'Employees.Read',
-  employeesWrite: 'Employees.Write'
+  employeesWrite: 'Employees.Write',
+  productsRead: 'Products.Read',
+  productsWrite: 'Products.Write'
 };
 
 const msalConfig: Configuration = {

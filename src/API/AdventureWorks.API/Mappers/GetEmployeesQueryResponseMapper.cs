@@ -13,7 +13,7 @@ public static class GetEmployeesQueryResponseMapper
             Page = page,
             PageSize = pageSize,
             TotalCount = response.TotalCount,
-            Items = response.Employees.Select(x => x.ToEmployeeResponse())
+            Items = response.Items.Select(x => x.ToEmployeeResponse())
         };
     }
     

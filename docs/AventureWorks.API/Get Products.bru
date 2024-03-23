@@ -1,0 +1,17 @@
+meta {
+  name: Get Products
+  type: http
+  seq: 5
+}
+
+get {
+  url: https://localhost:8000/api/v1/products?page=1&pageSize=10&includeTotalCount=true
+  body: none
+  auth: none
+}
+
+query {
+  page: 1
+  pageSize: 10
+  includeTotalCount: true
+}

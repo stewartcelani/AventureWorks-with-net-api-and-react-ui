@@ -4,6 +4,7 @@ using AdventureWorks.Application.Common.Logging;
 using AdventureWorks.Application.Common.Settings;
 using AdventureWorks.Infrastructure.Common.Data;
 using AdventureWorks.Infrastructure.Employees;
+using AdventureWorks.Infrastructure.Products;
 using FluentValidation;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -45,8 +46,9 @@ public static class DependencyInjection
         // Dapper wrapper
         services.AddTransient<IDbConnectionFactory, SqlDbConnectionFactory>();
         
-        // Employee Repository
+        // Repositories
         services.AddTransient<IEmployeeRepository, EmployeeRepository>();
+        services.AddTransient<IProductRepository, ProductRepository>();
         
         return services;
     }

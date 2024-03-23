@@ -1,5 +1,5 @@
 using AdventureWorks.API.Mappers;
-using AdventureWorks.Application.Employees.Queries.GetEmployeeByBusinessEntityID;
+using AdventureWorks.Application.Employees.Queries.GetEmployeeById;
 using AdventureWorks.Application.Employees.Queries.GetEmployeeByNationalIdNumber;
 using AdventureWorks.Application.Employees.Queries.GetEmployees;
 using AdventureWorks.Contracts.v1;
@@ -23,7 +23,7 @@ public class EmployeesController(ISender mediator) : ControllerBase
     [HttpGet(ApiEndpoints.Employees.GetEmployeeByBusinessEntityId.Url, Name = nameof(GetEmployeeByBusinessEntityId))]
     public async Task<IActionResult> GetEmployeeByBusinessEntityId(int businessEntityID, CancellationToken cancellationToken = default)
     {
-        var result = await _mediator.Send(new GetEmployeeByBusinessEntityIdQuery(businessEntityID), cancellationToken);
+        var result = await _mediator.Send(new GetEmployeeByIdQuery(businessEntityID), cancellationToken);
         if (result.IsError) return result.FirstError.ToActionResult();
         return result.Value is null ? NotFound() : Ok(result.Value.ToEmployeeResponse());
     }
@@ -41,7 +41,7 @@ public class EmployeesController(ISender mediator) : ControllerBase
     [HttpGet(ApiEndpoints.Employees.GetEmployees.Url, Name = nameof(GetEmployees))]
     public async Task<IActionResult> GetEmployees([FromQuery] GetEmployeesRequest request, CancellationToken cancellationToken = default)
     {
-        var randomDelay = new Random().Next(0, 1000);
+        var randomDelay = new Random().Next(0, 350);
         await Task.Delay(randomDelay, cancellationToken);
         var filter = request.ToGetEmployeesFilter();
         var result = await _mediator.Send(new GetEmployeesQuery(filter), cancellationToken);

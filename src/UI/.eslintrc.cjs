@@ -11,7 +11,6 @@ module.exports = {
     'plugin:react/jsx-runtime',
     'plugin:react-hooks/recommended',
     'plugin:@tanstack/eslint-plugin-query/recommended',
-    'prettier',
     'plugin:prettier/recommended',
     'plugin:tailwindcss/recommended'
   ],
@@ -25,9 +24,8 @@ module.exports = {
   },
   plugins: ['react-refresh', 'prettier', '@typescript-eslint', 'react', 'tailwindcss'],
   rules: {
-    'comma-dangle': 0,
     'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
-    'prettier/prettier': 'error',
+    'prettier/prettier': 'all',
     'sort-imports': ['error', { ignoreCase: true, ignoreDeclarationSort: true }],
     'import/order': [
       1,

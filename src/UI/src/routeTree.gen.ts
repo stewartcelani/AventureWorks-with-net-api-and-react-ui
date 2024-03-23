@@ -14,6 +14,7 @@ import { Route as rootRoute } from './routes/__root'
 import { Route as SettingsImport } from './routes/settings'
 import { Route as IndexImport } from './routes/index'
 import { Route as SettingsIndexImport } from './routes/settings.index'
+import { Route as ProductsIndexImport } from './routes/products.index'
 import { Route as EmployeesIndexImport } from './routes/employees.index'
 import { Route as SettingsClaimsIndexImport } from './routes/settings.claims.index'
 import { Route as SettingsAppearanceIndexImport } from './routes/settings.appearance.index'
@@ -34,6 +35,13 @@ const SettingsIndexRoute = SettingsIndexImport.update({
   path: '/',
   getParentRoute: () => SettingsRoute,
 } as any)
+
+const ProductsIndexRoute = ProductsIndexImport.update({
+  path: '/products/',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() =>
+  import('./routes/products.index.lazy').then((d) => d.Route),
+)
 
 const EmployeesIndexRoute = EmployeesIndexImport.update({
   path: '/employees/',
@@ -72,6 +80,10 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EmployeesIndexImport
       parentRoute: typeof rootRoute
     }
+    '/products/': {
+      preLoaderRoute: typeof ProductsIndexImport
+      parentRoute: typeof rootRoute
+    }
     '/settings/': {
       preLoaderRoute: typeof SettingsIndexImport
       parentRoute: typeof SettingsImport
@@ -97,6 +109,7 @@ export const routeTree = rootRoute.addChildren([
     SettingsClaimsIndexRoute,
   ]),
   EmployeesIndexRoute,
+  ProductsIndexRoute,
 ])
 
 /* prettier-ignore-end */

@@ -1,3 +1,4 @@
+using AdventureWorks.Application.Common.Domain;
 using AdventureWorks.Application.Common.Interfaces;
 using AdventureWorks.Application.Common.Settings;
 using AdventureWorks.Application.Employees.Queries.GetEmployees;
@@ -24,10 +25,10 @@ public class EmployeeRepository(ConnectionStrings connectionStrings, IDbConnecti
         };
         var query = filter.BuildGetQuery();
         using var connection = _dbConnectionFactory.CreateConnection(_connectionStrings.AdventureWorks);
-        var employee =
+        var employeeQueryModel =
             await connection.QuerySingleOrDefaultAsync<EmployeeQueryModel>(
                 new CommandDefinition(query, filter, cancellationToken: cancellationToken));
-        return employee?.ToEmployee();
+        return employeeQueryModel?.ToEmployee();
     }
 
     public async Task<Employee?> GetEmployeeAsync(string nationalIdNumber, CancellationToken cancellationToken)
@@ -40,10 +41,10 @@ public class EmployeeRepository(ConnectionStrings connectionStrings, IDbConnecti
         };
         var query = filter.BuildGetQuery();
         using var connection = _dbConnectionFactory.CreateConnection(_connectionStrings.AdventureWorks);
-        var employee =
+        var employeeQueryModel =
             await connection.QuerySingleOrDefaultAsync<EmployeeQueryModel>(
                 new CommandDefinition(query, filter, cancellationToken: cancellationToken));
-        return employee?.ToEmployee();
+        return employeeQueryModel?.ToEmployee();
     }
 
     public async Task<GetEmployeesQueryResponse> GetEmployeesAsync(GetEmployeesFilter filter,
@@ -57,7 +58,7 @@ public class EmployeeRepository(ConnectionStrings connectionStrings, IDbConnecti
         var employees = employeeQueryModels.Select(x => x.ToEmployee()).ToList();
         var response = new GetEmployeesQueryResponse
         {
-            Employees = employees,
+            Items = employees,
             TotalCount = null
         };
         if (!filter.IncludeTotalCount) return response;
