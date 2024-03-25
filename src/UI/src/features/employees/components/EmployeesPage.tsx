@@ -1,6 +1,6 @@
 import { Link, useNavigate } from '@tanstack/react-router';
 import { useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
-import { RefreshCcw } from 'lucide-react';
+import { RefreshCcw, X } from 'lucide-react';
 import { debounce } from 'lodash';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
@@ -18,12 +18,9 @@ export default function EmployeesPage() {
   const [inputValue, setInputValue] = useState(searchTerm || '');
   const inputRef = useRef<HTMLInputElement>(null);
   const { data, isFetching } = useSuspenseQuery(getEmployeesQueryOptions({ page, pageSize, searchTerm }));
-  const caption = data.items.length === 0 ? 'No employees found' : '';
 
   useEffect(() => {
-    if (inputRef.current) {
-      inputRef.current.focus();
-    }
+    inputRef?.current?.focus();
   }, []);
 
   const debouncedSearch = useCallback(() => {
@@ -45,16 +42,31 @@ export default function EmployeesPage() {
       </div>
       <div className="flex items-center justify-end space-x-2">
         <div className="flex-1 space-x-2">
-          <Input
-            ref={inputRef}
-            className="w-[250px] sm:w-[350px]"
-            placeholder="Search employees"
-            value={inputValue}
-            onChange={(e) => {
-              setInputValue(e.target.value);
-              debouncedSearch()(e.target.value);
-            }}
-          />
+          <div className="relative w-[250px] sm:w-[350px]">
+            <Input
+              ref={inputRef}
+              className="w-[250px] sm:w-[350px]"
+              placeholder="Search employees"
+              value={inputValue}
+              onChange={(e) => {
+                setInputValue(e.target.value);
+                debouncedSearch()(e.target.value);
+              }}
+            />
+            {inputValue.length > 0 && (
+              <X
+                className="absolute size-5 cursor-pointer text-muted-foreground"
+                style={{ top: '10px', right: '10px' }}
+                onClick={() => {
+                  setInputValue('');
+                  void navigate({
+                    search: { page: 1, pageSize: pageSize, searchTerm: '' }
+                  });
+                  inputRef?.current?.focus();
+                }}
+              />
+            )}
+          </div>
         </div>
         <div className="space-x-2">
           <Button
@@ -72,7 +84,7 @@ export default function EmployeesPage() {
         </div>
       </div>
       <Table>
-        <TableCaption>{caption}</TableCaption>
+        <TableCaption>{data.items.length === 0 ? 'No employees found' : ''}</TableCaption>
         <TableHeader>
           <TableRow>
             <TableHead className="w-[250px]">Name</TableHead>
@@ -96,7 +108,7 @@ export default function EmployeesPage() {
           ))}
         </TableBody>
       </Table>
-      <div className="flex items-center justify-end space-x-2 py-4">
+      <div className="flex items-center justify-end">
         <div className="flex-1 text-sm text-muted-foreground">
           {data.totalCount} {data.totalCount && data.totalCount > 1 ? 'employees' : 'employee'}
         </div>
