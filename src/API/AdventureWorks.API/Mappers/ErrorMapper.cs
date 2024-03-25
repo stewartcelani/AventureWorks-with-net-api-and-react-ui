@@ -30,6 +30,7 @@ public static class ErrorMapper
         var genericProblemDetails = new ProblemDetails
         {
             Title = "Internal Server Error",
+            Extensions = { ["code"] = 500 },
             Detail = "An unexpected error occurred.",
             Status = StatusCodes.Status500InternalServerError
         };

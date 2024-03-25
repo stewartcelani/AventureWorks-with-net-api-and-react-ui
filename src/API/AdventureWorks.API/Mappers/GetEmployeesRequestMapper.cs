@@ -10,6 +10,7 @@ public static class GetEmployeesRequestMapper
     {
         return new GetEmployeesFilter
         {
+            SearchTerm = "%" + request.SearchTerm + "%",
             Page = request.Page,
             PageSize = request.PageSize,
             IncludeTotalCount = request.IncludeTotalCount,

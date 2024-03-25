@@ -5,7 +5,6 @@ import { useEffect } from 'react';
 import HeaderNav from '@components/layout/HeaderNav.tsx';
 import { useUiStore } from '@stores/uiStore.ts';
 import { logger } from '@/lib/logger.ts';
-import { ThemeToggle } from '@components/layout/ThemeToggle.tsx';
 import { Input } from '@components/ui/input.tsx';
 import { useTheme } from '@providers/ThemeProvider.tsx';
 
@@ -19,15 +18,12 @@ export default function RootLayout() {
   useEffect(() => {
     const errorHandler = (event: ErrorEvent) => {
       const errorProperties: object = {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-assignment
         errorType: event.error?.name || 'Unknown',
         message: event.message,
         filename: event.filename,
         lineno: event.lineno,
         colno: event.colno,
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-assignment
         stack: event.error?.stack,
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-assignment
         componentStack: event.error?.componentStack,
         uri: window.location.href,
         userAgent: navigator.userAgent,

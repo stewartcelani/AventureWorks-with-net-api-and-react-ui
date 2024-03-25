@@ -3,6 +3,7 @@ import { AuthenticatedTemplate, UnauthenticatedTemplate, useMsal, useMsalAuthent
 import { InteractionRequiredAuthError, InteractionType } from '@azure/msal-browser';
 import { AuthContext as AuthContextType } from '@/types/authContext.ts';
 import { AuthContext } from '@/hooks/useAuth';
+import FakeProgress from '@components/ui/loading/FakeProgress.tsx';
 
 interface AuthProviderProps {
   authContext: AuthContextType;
@@ -32,7 +33,9 @@ export const AuthProvider = ({ children, authContext }: AuthProviderProps) => {
         <AuthContext.Provider value={authContext}>{children}</AuthContext.Provider>
       </AuthenticatedTemplate>
       <UnauthenticatedTemplate>
-        <p>Redirecting for authentication...</p>
+        <div className="fixed inset-0 flex items-center justify-center">
+          <FakeProgress className="h-3 w-[250px]" />
+        </div>
       </UnauthenticatedTemplate>
     </>
   );

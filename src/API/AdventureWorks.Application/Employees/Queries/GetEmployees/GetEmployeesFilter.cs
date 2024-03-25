@@ -7,4 +7,5 @@ public class GetEmployeesFilter : PagedFilter
     public bool IncludeTotalCount { get; init; } = false;
     public int? BusinessEntityID { get; init; }
     public string? NationalIDNumber { get; init; }
+    public string? SearchTerm { get; init; }
 }

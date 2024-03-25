@@ -41,8 +41,8 @@ public class EmployeesController(ISender mediator) : ControllerBase
     [HttpGet(ApiEndpoints.Employees.GetEmployees.Url, Name = nameof(GetEmployees))]
     public async Task<IActionResult> GetEmployees([FromQuery] GetEmployeesRequest request, CancellationToken cancellationToken = default)
     {
-        var randomDelay = new Random().Next(0, 350);
-        await Task.Delay(randomDelay, cancellationToken);
+        /*var randomDelay = new Random().Next(0, 350);
+        await Task.Delay(randomDelay, cancellationToken);*/
         var filter = request.ToGetEmployeesFilter();
         var result = await _mediator.Send(new GetEmployeesQuery(filter), cancellationToken);
         return result.IsError ? result.FirstError.ToActionResult() : Ok(result.Value.ToPagedResponse(filter.Page, filter.PageSize));

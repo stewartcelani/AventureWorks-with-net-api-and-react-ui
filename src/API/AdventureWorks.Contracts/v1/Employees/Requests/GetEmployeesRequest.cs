@@ -4,5 +4,6 @@ namespace AdventureWorks.Contracts.v1.Employees.Requests;
 
 public class GetEmployeesRequest : PagedRequest
 {
-    
+    public string? SearchTerm { get; init; }
+
 }

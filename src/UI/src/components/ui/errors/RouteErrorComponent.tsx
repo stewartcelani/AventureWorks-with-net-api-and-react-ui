@@ -1,7 +1,7 @@
-import { ErrorComponent, type ErrorRouteProps } from '@tanstack/react-router';
+import { ErrorComponent } from '@tanstack/react-router';
 import { AuthenticationError } from '@errors/authenticationError.ts';
 
-export default function RouteErrorComponent({ error }: ErrorRouteProps) {
+export default function RouteErrorComponent({ error }) {
   if (error instanceof AuthenticationError) {
     return (
       <div style={{ color: 'red' }}>

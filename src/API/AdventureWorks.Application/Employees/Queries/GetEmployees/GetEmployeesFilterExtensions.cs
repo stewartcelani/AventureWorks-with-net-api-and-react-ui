@@ -62,6 +62,15 @@ public static class GetEmployeesFilterExtensions
         {
             whereQuery += "AND E.NationalIDNumber = @NationalIDNumber ";
         }
+        
+        if (!string.IsNullOrWhiteSpace(filter.SearchTerm))
+        {
+            whereQuery += @"AND (E.LoginID LIKE @SearchTerm 
+                                    OR CONCAT(P.FirstName, ' ', P.LastName) LIKE @SearchTerm                                    
+                                    OR D.Name LIKE @SearchTerm 
+                                    OR D.GroupName LIKE @SearchTerm 
+                                    OR E.JobTitle LIKE @SearchTerm) ";
+        }
 
         return whereQuery;
     }

@@ -25,7 +25,7 @@ module.exports = {
   plugins: ['react-refresh', 'prettier', '@typescript-eslint', 'react', 'tailwindcss'],
   rules: {
     'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
-    'prettier/prettier': 'all',
+    'prettier/prettier': 1,
     'sort-imports': ['error', { ignoreCase: true, ignoreDeclarationSort: true }],
     'import/order': [
       1,

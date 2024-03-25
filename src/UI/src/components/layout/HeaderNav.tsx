@@ -10,7 +10,6 @@ import { cn } from '@utils';
 import { defaultGetProductsRequest } from '@features/products/queries/getProducts.ts';
 import { defaultGetEmployeesRequest } from '@/features/employees/queries/getEmployees';
 
-
 export default function HeaderNav({ className, ...props }: HTMLAttributes<HTMLElement>) {
   const {
     location: { pathname }
@@ -21,7 +20,7 @@ export default function HeaderNav({ className, ...props }: HTMLAttributes<HTMLEl
       <nav className={cn('flex items-center space-x-4 lg:space-x-6', className)} {...props}>
         <Link
           to={IndexRoute.to}
-          className="px-1.5 text-sm font-medium transition-colors"
+          className="text-md px-1.5 font-medium transition-colors"
           activeProps={{
             className: 'text-primary'
           }}
@@ -32,36 +31,31 @@ export default function HeaderNav({ className, ...props }: HTMLAttributes<HTMLEl
           Dashboard
         </Link>
         <AuthorizeView role={appRoles.productsRead}>
-            <Link
-              to={ProductsRoute.to}
-              className="px-1.5 text-sm font-medium transition-colors"
-              activeProps={{
-                className: 'text-primary'
-              }}
-              inactiveProps={{
-                className: 'text-muted-foreground hover:text-foreground/90'
-              }}
-              search={{
-                page: defaultGetProductsRequest.page,
-                pageSize: defaultGetProductsRequest.pageSize
-              }}
-            >
-              Products
+          <Link
+            to={ProductsRoute.to}
+            className={cn(
+              'text-md px-1.5 font-medium transition-colors',
+              pathname.startsWith('/products/') ? 'text-primary' : 'text-muted-foreground hover:text-foreground/90'
+            )}
+            search={{
+              page: defaultGetProductsRequest.page,
+              pageSize: defaultGetProductsRequest.pageSize
+            }}
+          >
+            Products
           </Link>
         </AuthorizeView>
         <AuthorizeView role={appRoles.employeesRead}>
           <Link
             to={EmployeeRoute.to}
-            className="px-1.5 text-sm font-medium transition-colors"
-            activeProps={{
-              className: 'text-primary'
-            }}
-            inactiveProps={{
-              className: 'text-muted-foreground hover:text-foreground/90'
-            }}
+            className={cn(
+              'text-md px-1.5 font-medium transition-colors',
+              pathname.startsWith('/employees/') ? 'text-primary' : 'text-muted-foreground hover:text-foreground/90'
+            )}
             search={{
               page: defaultGetEmployeesRequest.page,
-              pageSize: defaultGetEmployeesRequest.pageSize
+              pageSize: defaultGetEmployeesRequest.pageSize,
+              searchTerm: defaultGetEmployeesRequest.searchTerm
             }}
           >
             Employees
@@ -70,7 +64,7 @@ export default function HeaderNav({ className, ...props }: HTMLAttributes<HTMLEl
         <Link
           to={SettingsClaimsRoute.to}
           className={cn(
-            'px-1.5 text-sm font-medium transition-colors',
+            'text-md px-1.5 font-medium transition-colors',
             pathname.startsWith('/settings/') ? 'text-primary' : 'text-muted-foreground hover:text-foreground/90'
           )}
         >
