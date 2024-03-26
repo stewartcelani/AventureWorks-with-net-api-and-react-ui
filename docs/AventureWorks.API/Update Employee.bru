@@ -1,0 +1,19 @@
+meta {
+  name: Update Employee
+  type: http
+  seq: 7
+}
+
+put {
+  url: https://localhost:8000/api/v1/employees/1
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "firstName": "Kendall",
+    "lastName": "Sanchez",
+    "jobTitle": "Chief Executive Officer"
+  }
+}

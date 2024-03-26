@@ -1,4 +1,5 @@
 using AdventureWorks.API.Mappers;
+using AdventureWorks.Application.Employees.Commands.UpdateEmployee;
 using AdventureWorks.Application.Employees.Queries.GetEmployeeById;
 using AdventureWorks.Application.Employees.Queries.GetEmployeeByNationalIdNumber;
 using AdventureWorks.Application.Employees.Queries.GetEmployees;
@@ -17,15 +18,30 @@ namespace AdventureWorks.API.Controllers;
 [RequiredScope(RequiredScopesConfigurationKey = "AzureAdSettings:Scopes")]
 public class EmployeesController(ISender mediator) : ControllerBase
 {
-    private readonly ISender _mediator = mediator;
+    private readonly ISender _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
 
     [Authorize(Roles = AuthConstants.Roles.Employees.Read)]
-    [HttpGet(ApiEndpoints.Employees.GetEmployeeByBusinessEntityId.Url, Name = nameof(GetEmployeeByBusinessEntityId))]
-    public async Task<IActionResult> GetEmployeeByBusinessEntityId(int businessEntityID, CancellationToken cancellationToken = default)
+    [HttpGet(ApiEndpoints.Employees.GetEmployeeById.Url, Name = nameof(GetEmployeeById))]
+    public async Task<IActionResult> GetEmployeeById(int businessEntityID, CancellationToken cancellationToken = default)
     {
         var result = await _mediator.Send(new GetEmployeeByIdQuery(businessEntityID), cancellationToken);
         if (result.IsError) return result.FirstError.ToActionResult();
         return result.Value is null ? NotFound() : Ok(result.Value.ToEmployeeResponse());
+    }
+    
+    [Authorize(Roles = AuthConstants.Roles.Employees.Write)]
+    [HttpPut(ApiEndpoints.Employees.GetEmployeeById.Url, Name = nameof(UpdateEmployeeById))]
+    public async Task<IActionResult> UpdateEmployeeById(int businessEntityID, [FromBody] UpdateEmployeeRequest request, CancellationToken cancellationToken = default)
+    {
+        var command = new UpdateEmployeeCommand
+        {
+            BusinessEntityID = businessEntityID,
+            FirstName = request.FirstName,
+            LastName = request.LastName,
+            JobTitle = request.JobTitle
+        };
+        var result = await _mediator.Send(command, cancellationToken);
+        return result.IsError ? result.FirstError.ToActionResult() : Ok();
     }
     
     [Authorize(Roles = AuthConstants.Roles.Employees.Read)]
@@ -47,5 +63,7 @@ public class EmployeesController(ISender mediator) : ControllerBase
         var result = await _mediator.Send(new GetEmployeesQuery(filter), cancellationToken);
         return result.IsError ? result.FirstError.ToActionResult() : Ok(result.Value.ToPagedResponse(filter.Page, filter.PageSize));
     }
+    
+   
   
 }

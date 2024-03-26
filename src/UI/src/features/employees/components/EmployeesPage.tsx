@@ -26,8 +26,9 @@ export default function EmployeesPage() {
 
   useEffect(() => {
     const debouncedSearch = debounce(() => {
+      if (inputValue.trim() === '') return;
       void navigate({
-        search: { page: 1, pageSize: pageSize, searchTerm: inputValue }
+        search: { page: page, pageSize: pageSize, searchTerm: inputValue }
       });
     }, 300);
 
@@ -36,7 +37,7 @@ export default function EmployeesPage() {
     return () => {
       debouncedSearch.cancel();
     };
-  }, [inputValue, navigate, pageSize]);
+  }, [inputValue, navigate, pageSize, page]);
 
   return (
     <>
@@ -94,10 +95,10 @@ export default function EmployeesPage() {
         <TableHeader>
           <TableRow>
             <TableHead className="w-[250px]">Name</TableHead>
-            <TableHead>Role</TableHead>
-            <TableHead>Department</TableHead>
-            <TableHead>Unit</TableHead>
-            <TableHead>Hire Date</TableHead>
+            <TableHead className="hidden sm:table-cell">Role</TableHead>
+            <TableHead className="hidden md:table-cell">Department</TableHead>
+            <TableHead className="hidden lg:table-cell">Unit</TableHead>
+            <TableHead className="hidden lg:table-cell">Hire Date</TableHead>
             <TableHead className="text-right"></TableHead>
           </TableRow>
         </TableHeader>
@@ -113,10 +114,10 @@ export default function EmployeesPage() {
                   {`${employee.firstName} ${employee.lastName}`}
                 </Link>
               </TableCell>
-              <TableCell>{employee.jobTitle}</TableCell>
-              <TableCell>{employee.department.name}</TableCell>
-              <TableCell>{employee.department.groupName}</TableCell>
-              <TableCell>{formatDate(employee.hireDate)}</TableCell>
+              <TableCell className="hidden sm:table-cell">{employee.jobTitle}</TableCell>
+              <TableCell className="hidden md:table-cell">{employee.department.name}</TableCell>
+              <TableCell className="hidden lg:table-cell">{employee.department.groupName}</TableCell>
+              <TableCell className="hidden lg:table-cell">{formatDate(employee.hireDate)}</TableCell>
               <TableCell className="text-right">...</TableCell>
             </TableRow>
           ))}

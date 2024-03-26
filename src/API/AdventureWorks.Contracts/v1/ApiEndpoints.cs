@@ -10,7 +10,7 @@ public static class ApiEndpoints
     {
         public const string EmployeesBase = Base + "/employees";
         
-        public static class GetEmployeeByBusinessEntityId
+        public static class GetEmployeeById
         {
             public const string Url = EmployeesBase + "/{businessEntityId}";
             public static string UrlFor(int businessEntityId) => Url.Replace("{businessEntityId}", businessEntityId.ToString());

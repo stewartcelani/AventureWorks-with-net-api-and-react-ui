@@ -75,5 +75,36 @@ public class EmployeeRepository(ConnectionStrings connectionStrings, IDbConnecti
         return response;
     }
 
+    public async Task<bool> UpdateEmployeeAsync(Employee employee, CancellationToken cancellationToken)
+    {
+        const string updateEmployeeQuery = @"
+        UPDATE HumanResources.Employee
+        SET JobTitle = @JobTitle
+        WHERE BusinessEntityID = @BusinessEntityID;";
+
+        const string updatePersonQuery = @"
+        UPDATE Person.Person
+        SET FirstName = @FirstName, LastName = @LastName
+        WHERE BusinessEntityID = @BusinessEntityID;";
+
+        using var connection = _dbConnectionFactory.CreateConnection(_connectionStrings.AdventureWorks);
+        connection.Open();
+
+        using var transaction = connection.BeginTransaction();
+        try
+        {
+            await connection.ExecuteAsync(new CommandDefinition(updateEmployeeQuery, employee, transaction: transaction, cancellationToken: cancellationToken));
+            await connection.ExecuteAsync(new CommandDefinition(updatePersonQuery, employee, transaction: transaction, cancellationToken: cancellationToken));
+
+            transaction.Commit();
+            return true;
+        }
+        catch (Exception)
+        {
+            transaction.Rollback();
+            throw;
+        }
+    }
+
     #endregion
 }

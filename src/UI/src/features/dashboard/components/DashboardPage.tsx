@@ -6,8 +6,9 @@ export default function DashboardPage() {
 
   return (
     <>
-      <div className="mb-6 flex items-center justify-between">
+      <div className="space-y-0.5">
         <h2 className="text-3xl font-bold tracking-tight">Dashboard</h2>
+        <p className="text-muted-foreground">Welcome {authContext.userClaims!.firstName}!</p>
       </div>
       <Tabs defaultValue="overview" className="w-[400px] space-y-6">
         <TabsList>
@@ -21,8 +22,7 @@ export default function DashboardPage() {
           </TabsTrigger>
         </TabsList>
         <TabsContent value="overview">
-          <p>Welcome, {authContext.account!.name}</p>
-          <pre>{JSON.stringify(authContext, null, 2)}</pre>
+          <p>Overview here.</p>
         </TabsContent>
         <TabsContent value="analytics">Analytics here.</TabsContent>
         <TabsContent value="reports">Reports here.</TabsContent>

@@ -42,7 +42,6 @@ export default function SettingsLayout() {
             ))}
           </nav>
         </aside>
-        {/* <Separator className="my-6 lg:hidden" /> */}
         <div className="flex-1 lg:max-w-2xl">
           <Outlet />
         </div>

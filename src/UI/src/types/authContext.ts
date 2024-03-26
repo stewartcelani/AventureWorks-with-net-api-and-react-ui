@@ -5,7 +5,6 @@ import { type UserClaims, UserClaimsSchema } from '@features/settings/types/user
 import { logger } from '@/lib/logger.ts';
 
 export type AuthContext = {
-  account: AccountInfo | null;
   userClaims: UserClaims | null;
   isAuthenticated: () => boolean;
   setAccount: (user: AccountInfo | null) => void;
@@ -14,33 +13,30 @@ export type AuthContext = {
 };
 
 export const authContext: AuthContext = {
-  account: null,
   userClaims: null,
   isAuthenticated: () => {
-    return !!authContext.account;
+    return !!authContext.userClaims;
   },
   setAccount: (user: AccountInfo | null) => {
     if (!user) {
       msalInstance.setActiveAccount(null);
-      authContext.account = null;
       logger.setUser(null);
       return;
     }
     authContext.userClaims = getUserClaimsFromAccountInfo(user);
     msalInstance.setActiveAccount(user);
-    authContext.account = user;
     logger.setUser(authContext.userClaims);
   },
   hasRole: (role: string) => {
-    if (!authContext.account || !authContext.account.idTokenClaims || !authContext.account.idTokenClaims.roles) {
+    if (!authContext.userClaims) {
       return false;
     }
-    const roles = authContext.account.idTokenClaims.roles;
+    const roles = authContext.userClaims.roles;
     return roles.includes(role);
   },
   getRoles: (): string[] => {
-    if (!authContext.account) return [];
-    return getRolesFromAccountInfo(authContext.account);
+    if (!authContext.userClaims) return [];
+    return authContext.userClaims.roles;
   }
 };
 
