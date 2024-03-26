@@ -18,6 +18,9 @@ import { Route as ProductsIndexImport } from './routes/products.index'
 import { Route as EmployeesIndexImport } from './routes/employees.index'
 import { Route as SettingsClaimsIndexImport } from './routes/settings.claims.index'
 import { Route as SettingsAppearanceIndexImport } from './routes/settings.appearance.index'
+import { Route as EmployeesEmployeeIdIndexImport } from './routes/employees.$employeeId.index'
+import { Route as SettingsClaimsServerIndexImport } from './routes/settings.claims.server.index'
+import { Route as SettingsClaimsLocalIndexImport } from './routes/settings.claims.local.index'
 
 // Create/Update Routes
 
@@ -53,15 +56,34 @@ const EmployeesIndexRoute = EmployeesIndexImport.update({
 const SettingsClaimsIndexRoute = SettingsClaimsIndexImport.update({
   path: '/claims/',
   getParentRoute: () => SettingsRoute,
-} as any).lazy(() =>
-  import('./routes/settings.claims.index.lazy').then((d) => d.Route),
-)
+} as any)
 
 const SettingsAppearanceIndexRoute = SettingsAppearanceIndexImport.update({
   path: '/appearance/',
   getParentRoute: () => SettingsRoute,
 } as any).lazy(() =>
   import('./routes/settings.appearance.index.lazy').then((d) => d.Route),
+)
+
+const EmployeesEmployeeIdIndexRoute = EmployeesEmployeeIdIndexImport.update({
+  path: '/employees/$employeeId/',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() =>
+  import('./routes/employees.$employeeId.index.lazy').then((d) => d.Route),
+)
+
+const SettingsClaimsServerIndexRoute = SettingsClaimsServerIndexImport.update({
+  path: '/claims/server/',
+  getParentRoute: () => SettingsRoute,
+} as any).lazy(() =>
+  import('./routes/settings.claims.server.index.lazy').then((d) => d.Route),
+)
+
+const SettingsClaimsLocalIndexRoute = SettingsClaimsLocalIndexImport.update({
+  path: '/claims/local/',
+  getParentRoute: () => SettingsRoute,
+} as any).lazy(() =>
+  import('./routes/settings.claims.local.index.lazy').then((d) => d.Route),
 )
 
 // Populate the FileRoutesByPath interface
@@ -88,12 +110,24 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SettingsIndexImport
       parentRoute: typeof SettingsImport
     }
+    '/employees/$employeeId/': {
+      preLoaderRoute: typeof EmployeesEmployeeIdIndexImport
+      parentRoute: typeof rootRoute
+    }
     '/settings/appearance/': {
       preLoaderRoute: typeof SettingsAppearanceIndexImport
       parentRoute: typeof SettingsImport
     }
     '/settings/claims/': {
       preLoaderRoute: typeof SettingsClaimsIndexImport
+      parentRoute: typeof SettingsImport
+    }
+    '/settings/claims/local/': {
+      preLoaderRoute: typeof SettingsClaimsLocalIndexImport
+      parentRoute: typeof SettingsImport
+    }
+    '/settings/claims/server/': {
+      preLoaderRoute: typeof SettingsClaimsServerIndexImport
       parentRoute: typeof SettingsImport
     }
   }
@@ -107,9 +141,12 @@ export const routeTree = rootRoute.addChildren([
     SettingsIndexRoute,
     SettingsAppearanceIndexRoute,
     SettingsClaimsIndexRoute,
+    SettingsClaimsLocalIndexRoute,
+    SettingsClaimsServerIndexRoute,
   ]),
   EmployeesIndexRoute,
   ProductsIndexRoute,
+  EmployeesEmployeeIdIndexRoute,
 ])
 
 /* prettier-ignore-end */

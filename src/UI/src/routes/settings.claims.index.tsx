@@ -1,3 +1,7 @@
-import { createFileRoute } from '@tanstack/react-router';
+﻿import { createFileRoute, redirect } from '@tanstack/react-router';
 
-export const Route = createFileRoute('/settings/claims/')({});
+export const Route = createFileRoute('/settings/claims/')({
+  beforeLoad: () => {
+    throw redirect({ to: '/settings/claims/local/' });
+  }
+});

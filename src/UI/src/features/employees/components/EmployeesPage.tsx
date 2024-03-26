@@ -2,10 +2,11 @@ import { Link, useNavigate } from '@tanstack/react-router';
 import { useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
 import { RefreshCcw, X } from 'lucide-react';
 import { debounce } from 'lodash';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import { getEmployeesQueryOptions } from '@features/employees/queries/getEmployees.ts';
-import { Route as EmployeeRoute, type EmployeesSearchParams } from '@routes/employees.index.tsx';
+import { Route as EmployeesRoute, type EmployeesSearchParams } from '@routes/employees.index.tsx';
+import { Route as EmployeeRoute } from '@routes/employees.$employeeId.index';
 import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { formatDate } from '@/lib/dates';
@@ -13,8 +14,8 @@ import { Input } from '@/components/ui/input';
 
 export default function EmployeesPage() {
   const queryClient = useQueryClient();
-  const navigate = useNavigate({ from: EmployeeRoute.fullPath });
-  const { page, pageSize, searchTerm } = EmployeeRoute.useSearch();
+  const navigate = useNavigate();
+  const { page, pageSize, searchTerm } = EmployeesRoute.useSearch();
   const [inputValue, setInputValue] = useState(searchTerm || '');
   const inputRef = useRef<HTMLInputElement>(null);
   const { data, isFetching } = useSuspenseQuery(getEmployeesQueryOptions({ page, pageSize, searchTerm }));
@@ -23,13 +24,19 @@ export default function EmployeesPage() {
     inputRef?.current?.focus();
   }, []);
 
-  const debouncedSearch = useCallback(() => {
-    return debounce((value: string) => {
+  useEffect(() => {
+    const debouncedSearch = debounce(() => {
       void navigate({
-        search: { page: 1, pageSize: pageSize, searchTerm: value }
+        search: { page: 1, pageSize: pageSize, searchTerm: inputValue }
       });
     }, 300);
-  }, [navigate, pageSize]);
+
+    debouncedSearch();
+
+    return () => {
+      debouncedSearch.cancel();
+    };
+  }, [inputValue, navigate, pageSize]);
 
   return (
     <>
@@ -50,7 +57,6 @@ export default function EmployeesPage() {
               value={inputValue}
               onChange={(e) => {
                 setInputValue(e.target.value);
-                debouncedSearch()(e.target.value);
               }}
             />
             {inputValue.length > 0 && (
@@ -98,7 +104,15 @@ export default function EmployeesPage() {
         <TableBody>
           {data.items.map((employee) => (
             <TableRow key={employee.businessEntityID}>
-              <TableCell className="font-medium">{`${employee.firstName} ${employee.lastName}`}</TableCell>
+              <TableCell className="font-medium">
+                <Link
+                  className="hover:underline"
+                  to={EmployeeRoute.to}
+                  params={{ employeeId: `${employee.businessEntityID}` }}
+                >
+                  {`${employee.firstName} ${employee.lastName}`}
+                </Link>
+              </TableCell>
               <TableCell>{employee.jobTitle}</TableCell>
               <TableCell>{employee.department.name}</TableCell>
               <TableCell>{employee.department.groupName}</TableCell>
@@ -114,7 +128,7 @@ export default function EmployeesPage() {
         </div>
         <div className="space-x-2">
           <Link
-            from={EmployeeRoute.fullPath}
+            from={EmployeesRoute.fullPath}
             disabled={page === 1}
             search={(prev: EmployeesSearchParams) => ({
               page: prev.page - 1,
@@ -127,7 +141,7 @@ export default function EmployeesPage() {
             </Button>
           </Link>
           <Link
-            from={EmployeeRoute.fullPath}
+            from={EmployeesRoute.fullPath}
             disabled={!data.hasNextPage}
             search={(prev: EmployeesSearchParams) => ({
               page: prev.page + 1,

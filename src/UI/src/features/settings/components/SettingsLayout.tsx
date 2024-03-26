@@ -5,8 +5,12 @@ import { buttonVariants } from '@components/ui/button.tsx';
 
 const sidebarNavItems = [
   {
-    title: 'Claims',
-    href: '/settings/claims'
+    title: 'Local Claims',
+    href: '/settings/claims/local'
+  },
+  {
+    title: 'Server Claims',
+    href: '/settings/claims/server'
   },
   {
     title: 'Appearance',

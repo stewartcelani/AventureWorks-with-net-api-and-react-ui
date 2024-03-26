@@ -4,7 +4,7 @@ import { Route as IndexRoute } from '@/routes';
 import AuthorizeView from '@components/auth/AuthorizeView.tsx';
 import { appRoles } from '@config/authConfig.ts';
 import { Route as EmployeeRoute } from '@routes/employees.index.tsx';
-import { Route as SettingsClaimsRoute } from '@routes/settings.claims.index.tsx';
+import { Route as SettingsClaimsRoute } from '@routes/settings.claims.local.index.tsx';
 import { Route as ProductsRoute } from '@routes/products.index.tsx';
 import { cn } from '@utils';
 import { defaultGetProductsRequest } from '@features/products/queries/getProducts.ts';

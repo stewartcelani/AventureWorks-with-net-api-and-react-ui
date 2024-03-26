@@ -12,7 +12,7 @@ export default function FakeProgress({ className, ...props }: FakeProgressProps)
       if (progress < 15) {
         setProgress(randomInt(15, 20));
       } else if (progress < 95) {
-        setProgress(progress + randomInt(1, 4));
+        setProgress(progress + randomInt(1, 2));
       } else if (progress >= 100) {
         /*setProgress(0);*/
       }
