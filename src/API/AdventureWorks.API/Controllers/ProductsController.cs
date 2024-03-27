@@ -23,7 +23,7 @@ public class ProductsController(ISender mediator) : ControllerBase
     [HttpGet(ApiEndpoints.Products.GetProductById.Url, Name = nameof(GetProductById))]
     public async Task<IActionResult> GetProductById(int productId, CancellationToken cancellationToken = default)
     {
-        var result = await _mediator.Send(new GetProductByIdQuery(productId), cancellationToken);
+        var result = await _mediator.Send(new GetProductByIdQuery(productId, HttpContext.ToExecutionContext()), cancellationToken);
         if (result.IsError) return result.FirstError.ToActionResult();
         return result.Value is null ? NotFound() : Ok(result.Value.ToProductResponse());
     }
@@ -35,7 +35,7 @@ public class ProductsController(ISender mediator) : ControllerBase
         /*var randomDelay = new Random().Next(0, 350);
         await Task.Delay(randomDelay, cancellationToken);*/
         var filter = request.ToGetProductsFilter();
-        var result = await _mediator.Send(new GetProductsQuery(filter), cancellationToken);
+        var result = await _mediator.Send(new GetProductsQuery(filter, HttpContext.ToExecutionContext()), cancellationToken);
         return result.IsError ? result.FirstError.ToActionResult() : Ok(result.Value.ToPagedResponse(filter.Page, filter.PageSize));
     }
     

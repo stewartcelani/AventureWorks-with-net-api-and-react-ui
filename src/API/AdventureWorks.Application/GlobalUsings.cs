@@ -1,0 +1,1 @@
+global using ExecutionContext = AdventureWorks.Application.Common.Pipelines.ExecutionContext;

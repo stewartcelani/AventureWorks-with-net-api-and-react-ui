@@ -2,6 +2,7 @@ using AdventureWorks.Application.Common.Helpers;
 using AdventureWorks.Application.Common.Interfaces;
 using AdventureWorks.Application.Common.Logging;
 using AdventureWorks.Application.Common.Settings;
+using AdventureWorks.Infrastructure.Common.Audit;
 using AdventureWorks.Infrastructure.Common.Data;
 using AdventureWorks.Infrastructure.Employees;
 using AdventureWorks.Infrastructure.Products;
@@ -49,6 +50,13 @@ public static class DependencyInjection
         // Repositories
         services.AddTransient<IEmployeeRepository, EmployeeRepository>();
         services.AddTransient<IProductRepository, ProductRepository>();
+        services.AddTransient<IAuditRepository, AuditRepository>();
+
+        
+        // Database Initializer
+        services.AddTransient<DatabaseInitializer>();
+        var databaseInitializer = services.BuildServiceProvider().GetRequiredService<DatabaseInitializer>();
+        databaseInitializer.Initialize();
         
         return services;
     }

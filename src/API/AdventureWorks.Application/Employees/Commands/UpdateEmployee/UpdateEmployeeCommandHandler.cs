@@ -14,7 +14,7 @@ public class UpdateEmployeeCommandHandler(IEmployeeRepository employeeRepository
 
     public async Task<ErrorOr<UpdateEmployeeCommandResponse>> Handle(UpdateEmployeeCommand request, CancellationToken cancellationToken)
     {
-        var employeeResult = await _mediator.Send(new GetEmployeeByIdQuery(request.BusinessEntityID), cancellationToken);
+        var employeeResult = await _mediator.Send(new GetEmployeeByIdQuery(request.BusinessEntityID, request.ExecutionContext), cancellationToken);
         if (employeeResult.IsError) return employeeResult.FirstError;
         
         var employee = employeeResult.Value;
@@ -43,7 +43,6 @@ public class UpdateEmployeeCommandHandler(IEmployeeRepository employeeRepository
         var updateResult = await _employeeRepository.UpdateEmployeeAsync(updatedEmployee, cancellationToken);
         if (!updateResult) return Error.Failure(description: "Failed to update employee.");
 
-        // TODO: Implement AuditLogging of commands in database
         return new UpdateEmployeeCommandResponse
         {
             EmployeeBeforeUpdate = employee,

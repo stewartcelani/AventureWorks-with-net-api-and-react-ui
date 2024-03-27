@@ -15,9 +15,10 @@ public static class DependencyInjection
         services.AddValidatorsFromAssemblyContaining<IDomainMarker>();
 
         services.AddMediatR(options => { options.RegisterServicesFromAssemblyContaining(typeof(DependencyInjection)); })
-            .AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
-        // TODO: Add ExecutionContext pipeline behaviour
-
+            .AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>))
+            .AddScoped(typeof(IPipelineBehavior<,>), typeof(AuditLoggingBehaviour<,>));
+        services.AddSingleton<ExecutionContextValidator>();
+        
         return services;
     }
 }

@@ -1,9 +1,10 @@
+using AdventureWorks.Application.Common.Pipelines;
 using MediatR;
 using ErrorOr;
 
 namespace AdventureWorks.Application.Employees.Commands.UpdateEmployee;
 
-public class UpdateEmployeeCommand : IRequest<ErrorOr<UpdateEmployeeCommandResponse>>
+public class UpdateEmployeeCommand : AuditableCommand, IRequest<ErrorOr<UpdateEmployeeCommandResponse>> 
 {
     public required int BusinessEntityID { get; init; }
     public required string NationalIDNumber { get; init; }

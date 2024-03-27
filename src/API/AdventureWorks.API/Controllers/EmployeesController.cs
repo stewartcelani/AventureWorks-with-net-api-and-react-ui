@@ -24,7 +24,7 @@ public class EmployeesController(ISender mediator) : ControllerBase
     [HttpGet(ApiEndpoints.Employees.GetEmployeeById.Url, Name = nameof(GetEmployeeById))]
     public async Task<IActionResult> GetEmployeeById(int businessEntityID, CancellationToken cancellationToken = default)
     {
-        var result = await _mediator.Send(new GetEmployeeByIdQuery(businessEntityID), cancellationToken);
+        var result = await _mediator.Send(new GetEmployeeByIdQuery(businessEntityID, HttpContext.ToExecutionContext()), cancellationToken);
         if (result.IsError) return result.FirstError.ToActionResult();
         return result.Value is null ? NotFound() : Ok(result.Value.ToEmployeeResponse());
     }
@@ -35,6 +35,7 @@ public class EmployeesController(ISender mediator) : ControllerBase
     {
         var command = new UpdateEmployeeCommand
         {
+            ExecutionContext = HttpContext.ToExecutionContext(),
             BusinessEntityID = businessEntityID,
             NationalIDNumber = request.NationalIDNumber.Trim(),
             FirstName = request.FirstName.Trim(),
@@ -50,7 +51,7 @@ public class EmployeesController(ISender mediator) : ControllerBase
     [HttpGet(ApiEndpoints.Employees.GetEmployeeByNationalIdNumber.Url, Name = nameof(GetEmployeeByNationalIdNumber))]
     public async Task<IActionResult> GetEmployeeByNationalIdNumber(string nationalIdNumber, CancellationToken cancellationToken = default)
     {
-        var result = await _mediator.Send(new GetEmployeeByNationalIdNumberQuery(nationalIdNumber), cancellationToken);
+        var result = await _mediator.Send(new GetEmployeeByNationalIdNumberQuery(nationalIdNumber, HttpContext.ToExecutionContext()), cancellationToken);
         if (result.IsError) return result.FirstError.ToActionResult();
         return result.Value is null ? NotFound() : Ok(result.Value.ToEmployeeResponse());
     }
@@ -62,7 +63,7 @@ public class EmployeesController(ISender mediator) : ControllerBase
         /*var randomDelay = new Random().Next(0, 350);
         await Task.Delay(randomDelay, cancellationToken);*/
         var filter = request.ToGetEmployeesFilter();
-        var result = await _mediator.Send(new GetEmployeesQuery(filter), cancellationToken);
+        var result = await _mediator.Send(new GetEmployeesQuery(filter, HttpContext.ToExecutionContext()), cancellationToken);
         return result.IsError ? result.FirstError.ToActionResult() : Ok(result.Value.ToPagedResponse(filter.Page, filter.PageSize));
     }
     
