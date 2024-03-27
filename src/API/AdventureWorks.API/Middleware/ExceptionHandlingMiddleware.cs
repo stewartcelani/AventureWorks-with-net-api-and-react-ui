@@ -24,6 +24,12 @@ public class ExceptionHandlingMiddleware
         {
             /*Swallow*/
         }
+        catch (UnauthorizedAccessException ex)
+        {
+            _logger.LogError(ex, ex.Message);
+            context.Response.StatusCode = 403;
+            await context.Response.CompleteAsync();
+        }
         catch (Exception ex)
         {
             _logger.LogCritical(ex, ex.Message);

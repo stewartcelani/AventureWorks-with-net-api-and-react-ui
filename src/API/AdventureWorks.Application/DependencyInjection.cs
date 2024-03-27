@@ -16,6 +16,7 @@ public static class DependencyInjection
 
         services.AddMediatR(options => { options.RegisterServicesFromAssemblyContaining(typeof(DependencyInjection)); })
             .AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>))
+            .AddScoped(typeof(IPipelineBehavior<,>), typeof(AuthorizationBehaviour<,>))
             .AddScoped(typeof(IPipelineBehavior<,>), typeof(AuditLoggingBehaviour<,>));
         services.AddSingleton<ExecutionContextValidator>();
         

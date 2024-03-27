@@ -11,7 +11,7 @@ namespace AdventureWorks.Application.Common.Pipelines;
 public class AuditLoggingBehaviour<TRequest, TResponse>(
     IAuditRepository auditRepository,
     ILoggerAdapter<AuditLoggingBehaviour<TRequest, TResponse>> logger,
-    IMediator mediator)
+    IMediator mediator, ExecutionContextValidator executionContextValidator)
     : IPipelineBehavior<TRequest, TResponse>
     where TRequest : notnull
 {
@@ -20,6 +20,8 @@ public class AuditLoggingBehaviour<TRequest, TResponse>(
     private readonly ILoggerAdapter<AuditLoggingBehaviour<TRequest, TResponse>> _logger =
         logger ?? throw new ArgumentNullException(nameof(logger));
     private readonly IMediator _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
+    private readonly ExecutionContextValidator _executionContextValidator = executionContextValidator ?? throw new ArgumentNullException(nameof(executionContextValidator));
+
 
     private List<string> _excludeRequestTypesFromLogging = [];
 
@@ -116,19 +118,17 @@ public class AuditLoggingBehaviour<TRequest, TResponse>(
         return response;
     }
 
-    private static async Task<ExecutionContext> GetExecutionContextAsync(TRequest request)
+    private async Task<ExecutionContext> GetExecutionContextAsync(TRequest request)
     {
         var executionContextProperty = typeof(TRequest).GetProperty(nameof(ExecutionContext));
         if (executionContextProperty is null)
         {
-            throw new ApplicationException($"All requests must be passed an {nameof(ExecutionContext)}.");
+            throw new UnauthorizedAccessException($"All requests must be passed an {nameof(ExecutionContext)}.");
         }
 
         var executionContext = (ExecutionContext)executionContextProperty!.GetValue(request)!;
-
-        var executionContextValidator = new ExecutionContextValidator();
-
-        await executionContextValidator.ValidateAndThrowAsync(executionContext);
+        
+        await _executionContextValidator.ValidateAndThrowAsync(executionContext);
 
         return executionContext;
     }

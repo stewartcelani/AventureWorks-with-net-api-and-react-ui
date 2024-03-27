@@ -1,9 +1,12 @@
 using AdventureWorks.Application.Common.Pipelines;
+using AdventureWorks.Domain.Authentication;
 using MediatR;
 using ErrorOr;
+using Microsoft.AspNetCore.Authorization;
 
 namespace AdventureWorks.Application.Employees.Commands.UpdateEmployee;
 
+[Authorize(Roles = AuthConstants.Roles.Employees.Write)]
 public class UpdateEmployeeCommand : AuditableCommand, IRequest<ErrorOr<UpdateEmployeeCommandResponse>> 
 {
     public required int BusinessEntityID { get; init; }
