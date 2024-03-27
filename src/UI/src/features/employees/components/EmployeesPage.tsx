@@ -26,7 +26,6 @@ export default function EmployeesPage() {
 
   useEffect(() => {
     const debouncedSearch = debounce(() => {
-      if (inputValue.trim() === '') return;
       void navigate({
         search: { page: page, pageSize: pageSize, searchTerm: inputValue }
       });

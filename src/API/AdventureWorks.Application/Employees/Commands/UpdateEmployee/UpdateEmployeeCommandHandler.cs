@@ -23,10 +23,10 @@ public class UpdateEmployeeCommandHandler(IEmployeeRepository employeeRepository
         var updatedEmployee = new Employee
         {
             BusinessEntityID = employee.BusinessEntityID,
-            NationalIDNumber = employee.NationalIDNumber,
+            NationalIDNumber = request.NationalIDNumber,
             LoginID = employee.LoginID,
             FirstName = request.FirstName,
-            MiddleName = employee.MiddleName,
+            MiddleName = request.MiddleName,
             LastName = request.LastName,
             JobTitle = request.JobTitle,
             BirthDate = employee.BirthDate,

@@ -36,9 +36,11 @@ public class EmployeesController(ISender mediator) : ControllerBase
         var command = new UpdateEmployeeCommand
         {
             BusinessEntityID = businessEntityID,
-            FirstName = request.FirstName,
-            LastName = request.LastName,
-            JobTitle = request.JobTitle
+            NationalIDNumber = request.NationalIDNumber.Trim(),
+            FirstName = request.FirstName.Trim(),
+            MiddleName = request.MiddleName.Trim(),
+            LastName = request.LastName.Trim(),
+            JobTitle = request.JobTitle.Trim()
         };
         var result = await _mediator.Send(command, cancellationToken);
         return result.IsError ? result.FirstError.ToActionResult() : Ok();

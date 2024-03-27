@@ -79,12 +79,12 @@ public class EmployeeRepository(ConnectionStrings connectionStrings, IDbConnecti
     {
         const string updateEmployeeQuery = @"
         UPDATE HumanResources.Employee
-        SET JobTitle = @JobTitle
+        SET JobTitle = @JobTitle, NationalIDNumber = @NationalIDNumber
         WHERE BusinessEntityID = @BusinessEntityID;";
 
         const string updatePersonQuery = @"
         UPDATE Person.Person
-        SET FirstName = @FirstName, LastName = @LastName
+        SET FirstName = @FirstName, MiddleName = @MiddleName, LastName = @LastName
         WHERE BusinessEntityID = @BusinessEntityID;";
 
         using var connection = _dbConnectionFactory.CreateConnection(_connectionStrings.AdventureWorks);
