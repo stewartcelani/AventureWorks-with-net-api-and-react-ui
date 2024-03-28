@@ -1,6 +1,6 @@
 import { Link, useNavigate } from '@tanstack/react-router';
 import { useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
-import { RefreshCcw, X } from 'lucide-react';
+import { EllipsisVertical, RefreshCcw, User, X } from 'lucide-react';
 import { debounce } from 'lodash';
 import { useEffect, useRef, useState } from 'react';
 
@@ -11,6 +11,15 @@ import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { formatDate } from '@/lib/dates';
 import { Input } from '@/components/ui/input';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger
+} from '@/components/ui/dropdown-menu';
+import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
+import { Dialog, DialogContent, DialogHeader, DialogTrigger } from '@/components/ui/dialog';
+import UpdateEmployeeForm from '@features/employees/components/UpdateEmployeeForm.tsx';
 
 export default function EmployeesPage() {
   const queryClient = useQueryClient();
@@ -19,6 +28,10 @@ export default function EmployeesPage() {
   const [inputValue, setInputValue] = useState(searchTerm || '');
   const inputRef = useRef<HTMLInputElement>(null);
   const { data, isFetching } = useSuspenseQuery(getEmployeesQueryOptions({ page, pageSize, searchTerm }));
+  const [sheetOpen, setSheetOpen] = useState(false);
+  const [selectedEmployeeId, setSelectedEmployeeId] = useState<number | null>(null);
+  const [sheetSide, setSheetSide] = useState<'left' | 'right' | 'bottom' | 'top'>('right');
+  const [dialogOpen, setDialogOpen] = useState(false);
 
   useEffect(() => {
     inputRef?.current?.focus();
@@ -117,7 +130,69 @@ export default function EmployeesPage() {
               <TableCell className="hidden md:table-cell">{employee.department.name}</TableCell>
               <TableCell className="hidden lg:table-cell">{employee.department.groupName}</TableCell>
               <TableCell className="hidden lg:table-cell">{formatDate(employee.hireDate)}</TableCell>
-              <TableCell className="text-right">...</TableCell>
+              <TableCell className="text-right">
+                <DropdownMenu>
+                  <DropdownMenuTrigger>
+                    <EllipsisVertical />
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent>
+                    <DropdownMenuItem
+                      className="text-md h-10 cursor-pointer"
+                      onClick={() => {
+                        setSheetSide('right');
+                        setSheetOpen(true);
+                        setSelectedEmployeeId(employee.businessEntityID);
+                      }}
+                    >
+                      <User className="mr-2 size-4" />
+                      <span>Edit (right)</span>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem
+                      className="text-md h-10 cursor-pointer"
+                      onClick={() => {
+                        setSheetSide('top');
+                        setSheetOpen(true);
+                        setSelectedEmployeeId(employee.businessEntityID);
+                      }}
+                    >
+                      <User className="mr-2 size-4" />
+                      <span>Edit (top)</span>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem
+                      className="text-md h-10 cursor-pointer"
+                      onClick={() => {
+                        setSheetSide('bottom');
+                        setSheetOpen(true);
+                        setSelectedEmployeeId(employee.businessEntityID);
+                      }}
+                    >
+                      <User className="mr-2 size-4" />
+                      <span>Edit (bottom)</span>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem
+                      className="text-md h-10 cursor-pointer"
+                      onClick={() => {
+                        setSheetSide('left');
+                        setSheetOpen(true);
+                        setSelectedEmployeeId(employee.businessEntityID);
+                      }}
+                    >
+                      <User className="mr-2 size-4" />
+                      <span>Edit (left)</span>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem
+                      className="text-md h-10 cursor-pointer"
+                      onClick={() => {
+                        setDialogOpen(true);
+                        setSelectedEmployeeId(employee.businessEntityID);
+                      }}
+                    >
+                      <User className="mr-2 size-4" />
+                      <span>Edit (modal)</span>
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>
@@ -155,6 +230,30 @@ export default function EmployeesPage() {
           </Link>
         </div>
       </div>
+      <Sheet open={sheetOpen} modal={true} onOpenChange={setSheetOpen}>
+        <SheetContent side={sheetSide}>
+          <SheetHeader className="mb-5">
+            <SheetTitle>Edit Employee</SheetTitle>
+          </SheetHeader>
+          {sheetOpen && selectedEmployeeId && (
+            <UpdateEmployeeForm employeeId={selectedEmployeeId} className="mb-5 space-y-5" />
+          )}
+        </SheetContent>
+      </Sheet>
+      <Dialog open={dialogOpen} modal={true} onOpenChange={setDialogOpen}>
+        <DialogTrigger>Open</DialogTrigger>
+        <DialogContent className="md:min-w-[750px] lg:min-w-[900px]">
+          <DialogHeader>
+            <SheetTitle>Edit Employee</SheetTitle>
+            {dialogOpen && selectedEmployeeId && (
+              <UpdateEmployeeForm
+                employeeId={selectedEmployeeId}
+                className="mb-2 mt-4 grid grid-cols-1 gap-x-8 gap-y-2 md:grid-cols-2 lg:grid-cols-3"
+              />
+            )}
+          </DialogHeader>
+        </DialogContent>
+      </Dialog>
     </>
   );
 }

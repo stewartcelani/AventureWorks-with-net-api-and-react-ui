@@ -31,10 +31,23 @@ export default function UpdateEmployeeForm({ employeeId, className, ...props }: 
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
+  const form = useForm<UpdateEmployeeRequest>({
+    resolver: zodResolver(updateEmployeeSchema),
+    defaultValues: {
+      nationalIdNumber: employee.nationalIDNumber,
+      firstName: employee.firstName,
+      middleName: employee.middleName,
+      lastName: employee.lastName,
+      jobTitle: employee.jobTitle
+    },
+    mode: 'onChange'
+  });
+
   const mutation = useMutation({
     mutationFn: updateEmployee,
     onSettled: () => {
       void queryClient.invalidateQueries({ queryKey: getEmployeeQueryOptions(Number(employeeId)).queryKey });
+      void queryClient.invalidateQueries({ queryKey: ['employees'] });
     },
     onSuccess: () => {
       toast({
@@ -51,17 +64,6 @@ export default function UpdateEmployeeForm({ employeeId, className, ...props }: 
         description: 'There was a problem with your request.'
       });
     }
-  });
-  const form = useForm<UpdateEmployeeRequest>({
-    resolver: zodResolver(updateEmployeeSchema),
-    defaultValues: {
-      nationalIdNumber: employee.nationalIDNumber,
-      firstName: employee.firstName,
-      middleName: employee.middleName,
-      lastName: employee.lastName,
-      jobTitle: employee.jobTitle
-    },
-    mode: 'onChange'
   });
 
   const onSubmit = async (updateEmployeeRequest: UpdateEmployeeRequest) => {
@@ -164,7 +166,7 @@ export default function UpdateEmployeeForm({ employeeId, className, ...props }: 
           />
         </div>
         <Button
-          disabled={mutation.isPending || form.formState.isSubmitting}
+          disabled={mutation.isPending || form.formState.isSubmitting || !form.formState.isDirty}
           type="submit"
           variant="outline"
           className="mt-0 hover:bg-primary/70"

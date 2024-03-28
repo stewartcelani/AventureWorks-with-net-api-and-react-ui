@@ -1,7 +1,5 @@
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
-using AdventureWorks.Application.Common.Pipelines;
-using FluentValidation;
 
 namespace AdventureWorks.Application.Common.Pipelines;
 

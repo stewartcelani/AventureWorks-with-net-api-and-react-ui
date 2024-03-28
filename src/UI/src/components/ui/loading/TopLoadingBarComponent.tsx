@@ -3,6 +3,7 @@ import { useUiStore } from '@stores/uiStore.ts';
 import { randomInt } from '@/lib/numbers.ts';
 
 export default function TopLoadingBarComponent() {
+  console.log('TopLoadingBarComponent');
   const progress = useUiStore((state) => state.topLoadingBarProgress);
   const setProgress = useUiStore((state) => state.setTopLoadingBarProgress);
   useEffect(() => {

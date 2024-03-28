@@ -10,7 +10,7 @@ export async function getEmployee(employeeId: number): Promise<Employee> {
 }
 
 export const getEmployeeQueryOptions = (employeeId: number) => ({
-  queryKey: ['getEmployee', employeeId],
+  queryKey: ['employee', employeeId],
   queryFn: () => getEmployee(employeeId)
 });
 

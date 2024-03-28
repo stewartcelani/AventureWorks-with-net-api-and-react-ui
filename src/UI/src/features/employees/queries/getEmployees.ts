@@ -35,7 +35,7 @@ export const getEmployeesQueryOptions = ({
   pageSize,
   searchTerm
 }: GetEmployeesRequest = defaultGetEmployeesRequest) => ({
-  queryKey: ['getEmployees', page, pageSize, searchTerm],
+  queryKey: ['employees', page, pageSize, searchTerm],
   queryFn: () => getEmployees({ page, pageSize, searchTerm })
 });
 

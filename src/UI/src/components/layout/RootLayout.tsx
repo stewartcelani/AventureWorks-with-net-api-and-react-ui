@@ -14,17 +14,18 @@ export default function RootLayout() {
   const setProgress = useUiStore((state) => state.setTopLoadingBarProgress);
   const { theme } = useTheme();
 
-  logger.logTrace('Layout rendered');
-
   useEffect(() => {
     const errorHandler = (event: ErrorEvent) => {
       const errorProperties: object = {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-assignment
         errorType: event.error?.name || 'Unknown',
         message: event.message,
         filename: event.filename,
         lineno: event.lineno,
         colno: event.colno,
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-assignment
         stack: event.error?.stack,
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-assignment
         componentStack: event.error?.componentStack,
         uri: window.location.href,
         userAgent: navigator.userAgent,
@@ -43,7 +44,14 @@ export default function RootLayout() {
 
   return (
     <>
-      <LoadingBar height={1} color="rgb(39, 39, 42)" progress={progress} onLoaderFinished={() => setProgress(0)} />
+      <LoadingBar
+        containerStyle={{ top: 1, zIndex: 9999 }}
+        height={1}
+        shadow={false}
+        color="rgb(46, 194, 224)"
+        progress={progress}
+        onLoaderFinished={() => setProgress(0)}
+      />
       <div className="border-b">
         <div className="relative ml-2 flex h-16 items-center px-3">
           <Link to="/" className="flex items-center space-x-2">
