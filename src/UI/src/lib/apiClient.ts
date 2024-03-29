@@ -4,6 +4,7 @@ import { appScopes, msalInstance } from '@config/authConfig';
 import { AuthenticationError } from '@errors/authenticationError.ts';
 import { apiBaseUrl } from '@config/apiConfig.cs.ts';
 
+
 export async function getAuthenticatedApiClient(): Promise<KyInstance> {
   return ky.extend({
     headers: {

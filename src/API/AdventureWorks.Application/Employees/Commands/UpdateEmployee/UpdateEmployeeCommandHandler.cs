@@ -1,4 +1,5 @@
 using AdventureWorks.Application.Common.Interfaces;
+using AdventureWorks.Application.Employees.Queries.GetDepartments;
 using AdventureWorks.Application.Employees.Queries.GetEmployeeById;
 using AdventureWorks.Domain.Employees;
 using ErrorOr;
@@ -20,27 +21,37 @@ public class UpdateEmployeeCommandHandler(IEmployeeRepository employeeRepository
         var employee = employeeResult.Value;
         if (employee is null) return Error.NotFound(description: "Employee not found.");
 
+        var departments = new List<Department> { employee.Department };
+        if (request.DepartmentID != employee.Department.DepartmentID)
+        {
+            var departmentResult = await _mediator.Send(new GetDepartmentsQuery(request.ExecutionContext), cancellationToken);
+            if (departmentResult.IsError) return departmentResult.FirstError;
+            departments = departmentResult.Value;
+        }
+
         var updatedEmployee = new Employee
         {
             BusinessEntityID = employee.BusinessEntityID,
             NationalIDNumber = request.NationalIDNumber,
-            LoginID = employee.LoginID,
+            LoginID = request.LoginID,
             FirstName = request.FirstName,
             MiddleName = request.MiddleName,
             LastName = request.LastName,
             JobTitle = request.JobTitle,
-            BirthDate = employee.BirthDate,
-            MaritalStatus = employee.MaritalStatus,
-            Gender = employee.Gender,
-            HireDate = employee.HireDate,
-            SalariedFlag = employee.SalariedFlag,
+            BirthDate = request.BirthDate,
+            MaritalStatus = request.MaritalStatus,
+            Gender = request.Gender,
+            HireDate = request.HireDate,
+            SalariedFlag = request.SalariedFlag,
             VacationHours = employee.VacationHours,
             SickLeaveHours = employee.SickLeaveHours,
-            CurrentFlag = employee.CurrentFlag,
-            Department = employee.Department
+            CurrentFlag = request.CurrentFlag,
+            Department = employee.Department.DepartmentID != request.DepartmentID
+                ? departments.First(x => x.DepartmentID == request.DepartmentID)
+                : employee.Department
         };
         
-        var updateResult = await _employeeRepository.UpdateEmployeeAsync(updatedEmployee, cancellationToken);
+        var updateResult = await _employeeRepository.UpdateEmployeeAsync(employee, updatedEmployee, cancellationToken);
         if (!updateResult) return Error.Failure(description: "Failed to update employee.");
 
         return new UpdateEmployeeCommandResponse

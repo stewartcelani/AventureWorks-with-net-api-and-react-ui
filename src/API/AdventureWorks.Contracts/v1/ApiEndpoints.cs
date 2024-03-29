@@ -26,6 +26,11 @@ public static class ApiEndpoints
         {
             public const string Url = EmployeesBase;
         }
+
+        public static class GetDepartments
+        {
+            public const string Url = EmployeesBase + "/departments";
+        }
     }
     
     public static class Products

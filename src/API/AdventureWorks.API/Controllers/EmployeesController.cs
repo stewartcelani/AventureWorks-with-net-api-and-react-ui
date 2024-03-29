@@ -1,5 +1,6 @@
 using AdventureWorks.API.Mappers;
 using AdventureWorks.Application.Employees.Commands.UpdateEmployee;
+using AdventureWorks.Application.Employees.Queries.GetDepartments;
 using AdventureWorks.Application.Employees.Queries.GetEmployeeById;
 using AdventureWorks.Application.Employees.Queries.GetEmployeeByNationalIdNumber;
 using AdventureWorks.Application.Employees.Queries.GetEmployees;
@@ -33,16 +34,7 @@ public class EmployeesController(ISender mediator) : ControllerBase
     [HttpPut(ApiEndpoints.Employees.GetEmployeeById.Url, Name = nameof(UpdateEmployeeById))]
     public async Task<IActionResult> UpdateEmployeeById(int businessEntityID, [FromBody] UpdateEmployeeRequest request, CancellationToken cancellationToken = default)
     {
-        var command = new UpdateEmployeeCommand
-        {
-            ExecutionContext = HttpContext.ToExecutionContext(),
-            BusinessEntityID = businessEntityID,
-            NationalIDNumber = request.NationalIDNumber.Trim(),
-            FirstName = request.FirstName.Trim(),
-            MiddleName = request.MiddleName.Trim(),
-            LastName = request.LastName.Trim(),
-            JobTitle = request.JobTitle.Trim()
-        };
+        var command = request.ToUpdateEmployeeCommand(businessEntityID, HttpContext.ToExecutionContext());
         var result = await _mediator.Send(command, cancellationToken);
         return result.IsError ? result.FirstError.ToActionResult() : Ok();
     }
@@ -60,11 +52,17 @@ public class EmployeesController(ISender mediator) : ControllerBase
     [HttpGet(ApiEndpoints.Employees.GetEmployees.Url, Name = nameof(GetEmployees))]
     public async Task<IActionResult> GetEmployees([FromQuery] GetEmployeesRequest request, CancellationToken cancellationToken = default)
     {
-        /*var randomDelay = new Random().Next(0, 350);
-        await Task.Delay(randomDelay, cancellationToken);*/
         var filter = request.ToGetEmployeesFilter();
         var result = await _mediator.Send(new GetEmployeesQuery(filter, HttpContext.ToExecutionContext()), cancellationToken);
         return result.IsError ? result.FirstError.ToActionResult() : Ok(result.Value.ToPagedResponse(filter.Page, filter.PageSize));
+    }
+    
+    [Authorize(Roles = AuthConstants.Roles.Employees.Read)]
+    [HttpGet(ApiEndpoints.Employees.GetDepartments.Url, Name = nameof(GetDepartments))]
+    public async Task<IActionResult> GetDepartments(CancellationToken cancellationToken = default)
+    {
+        var result = await _mediator.Send(new GetDepartmentsQuery(HttpContext.ToExecutionContext()), cancellationToken);
+        return result.IsError ? result.FirstError.ToActionResult() : Ok(result.Value);
     }
     
    

@@ -1,5 +1,5 @@
 ﻿import { useSuspenseQuery } from '@tanstack/react-query';
-import UpdateEmployeeForm from '@features/employees/components/UpdateEmployeeForm.tsx';
+import { UpdateEmployeeForm } from '@features/employees/components/UpdateEmployee.tsx';
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -11,11 +11,13 @@ import {
 import { getEmployeeQueryOptions } from '@features/employees/queries/getEmployee.ts';
 import { Route as EmployeeRoute } from '@routes/employees.$employeeId.index';
 import { Route as EmployeesRoute } from '@routes/employees.index.tsx';
+import { getEmployeeDepartmentsQueryOptions } from '@features/employees/queries/getEmployeeDepartments.ts';
 
 export default function EmployeePage() {
   const { employeeId } = EmployeeRoute.useParams();
   const employeeIdNumber = Number(employeeId);
   const { data: employee } = useSuspenseQuery(getEmployeeQueryOptions(employeeIdNumber));
+  const { data: departments } = useSuspenseQuery(getEmployeeDepartmentsQueryOptions());
 
   return (
     <>
@@ -43,7 +45,8 @@ export default function EmployeePage() {
         <div></div>
       </div>
       <UpdateEmployeeForm
-        employeeId={employeeIdNumber}
+        employee={employee}
+        departments={departments}
         className="my-6 grid grid-cols-1 gap-x-8 gap-y-2 md:grid-cols-2 lg:grid-cols-3"
       />
     </>

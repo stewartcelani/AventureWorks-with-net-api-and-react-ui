@@ -5,6 +5,7 @@ import RouteErrorComponent from '@components/ui/errors/RouteErrorComponent.tsx';
 import TopLoadingBarComponent from '@components/ui/loading/TopLoadingBarComponent.tsx';
 import { appRoles } from '@config/authConfig.ts';
 import { AuthenticationError } from '@errors/authenticationError.ts';
+import { getEmployeeDepartmentsQueryOptions } from '@features/employees/queries/getEmployeeDepartments.ts';
 
 export const Route = createFileRoute('/employees/$employeeId/')({
   beforeLoad: ({ context: { authContext } }) => {
@@ -15,8 +16,10 @@ export const Route = createFileRoute('/employees/$employeeId/')({
   parseParams: (params) => ({
     employeeId: z.number().int().parse(Number(params.employeeId))
   }),
-  loader: ({ context: { queryClient }, params: { employeeId } }) =>
-    queryClient.ensureQueryData(getEmployeeQueryOptions(Number(employeeId))),
+  loader: ({ context: { queryClient }, params: { employeeId } }) => {
+    queryClient.ensureQueryData(getEmployeeQueryOptions(Number(employeeId)));
+    queryClient.ensureQueryData(getEmployeeDepartmentsQueryOptions());
+  },
   errorComponent: RouteErrorComponent,
   pendingComponent: TopLoadingBarComponent
 });

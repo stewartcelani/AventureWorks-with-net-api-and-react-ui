@@ -2,10 +2,12 @@ using AdventureWorks.Application.Common.Helpers;
 using AdventureWorks.Application.Common.Interfaces;
 using AdventureWorks.Application.Common.Logging;
 using AdventureWorks.Application.Common.Settings;
+using AdventureWorks.Domain.Employees;
 using AdventureWorks.Infrastructure.Common.Audit;
 using AdventureWorks.Infrastructure.Common.Data;
 using AdventureWorks.Infrastructure.Employees;
 using AdventureWorks.Infrastructure.Products;
+using Dapper;
 using FluentValidation;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -46,6 +48,9 @@ public static class DependencyInjection
         
         // Dapper wrapper
         services.AddTransient<IDbConnectionFactory, SqlDbConnectionFactory>();
+        SqlMapper.AddTypeHandler(new DateOnlyTypeHandler());
+        SqlMapper.AddTypeHandler(new MartialStatusTypeHandler());
+        SqlMapper.AddTypeHandler(new GenderTypeHandler());
         
         // Repositories
         services.AddTransient<IEmployeeRepository, EmployeeRepository>();

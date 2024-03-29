@@ -14,10 +14,14 @@ export const employeeSchema = z.object({
   middleName: z.string(),
   lastName: z.string(),
   jobTitle: z.string(),
-  birthDate: z.string(),
-  maritalStatus: z.string(),
-  gender: z.string(),
-  hireDate: z.string(),
+  birthDate: z.preprocess((arg) => {
+    if (typeof arg === 'string' || arg instanceof Date) return new Date(arg);
+  }, z.date()),
+  maritalStatus: z.enum(['Single', 'Married']),
+  gender: z.enum(['Male', 'Female']),
+  hireDate: z.preprocess((arg) => {
+    if (typeof arg === 'string' || arg instanceof Date) return new Date(arg);
+  }, z.date()),
   salariedFlag: z.boolean(),
   vacationHours: z.number(),
   sickLeaveHours: z.number(),

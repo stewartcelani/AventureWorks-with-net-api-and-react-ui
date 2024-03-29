@@ -1,5 +1,3 @@
-using ExecutionContext = AdventureWorks.Application.Common.Pipelines.ExecutionContext;
-
 namespace AdventureWorks.API.Mappers;
 
 public static class HttpContextMapper

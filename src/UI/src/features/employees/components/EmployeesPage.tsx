@@ -11,15 +11,10 @@ import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { formatDate } from '@/lib/dates';
 import { Input } from '@/components/ui/input';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger
-} from '@/components/ui/dropdown-menu';
+import {  DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
-import { Dialog, DialogContent, DialogHeader, DialogTrigger } from '@/components/ui/dialog';
-import UpdateEmployeeForm from '@features/employees/components/UpdateEmployeeForm.tsx';
+import { Dialog, DialogContent, DialogHeader } from '@/components/ui/dialog';
+import UpdateEmployee from '@features/employees/components/UpdateEmployee.tsx';
 
 export default function EmployeesPage() {
   const queryClient = useQueryClient();
@@ -129,7 +124,7 @@ export default function EmployeesPage() {
               <TableCell className="hidden sm:table-cell">{employee.jobTitle}</TableCell>
               <TableCell className="hidden md:table-cell">{employee.department.name}</TableCell>
               <TableCell className="hidden lg:table-cell">{employee.department.groupName}</TableCell>
-              <TableCell className="hidden lg:table-cell">{formatDate(employee.hireDate)}</TableCell>
+              <TableCell className="hidden lg:table-cell">{employee.hireDate.toLocaleDateString()}</TableCell>
               <TableCell className="text-right">
                 <DropdownMenu>
                   <DropdownMenuTrigger>
@@ -231,22 +226,21 @@ export default function EmployeesPage() {
         </div>
       </div>
       <Sheet open={sheetOpen} modal={true} onOpenChange={setSheetOpen}>
-        <SheetContent side={sheetSide}>
+        <SheetContent side={sheetSide} className="pr-1">
           <SheetHeader className="mb-5">
             <SheetTitle>Edit Employee</SheetTitle>
           </SheetHeader>
           {sheetOpen && selectedEmployeeId && (
-            <UpdateEmployeeForm employeeId={selectedEmployeeId} className="mb-5 space-y-5" />
+            <UpdateEmployee employeeId={selectedEmployeeId} className="mb-5 space-y-5 pr-4" style={{overflowY: 'auto', maxHeight: 'calc(100vh - 160px)'}}/>
           )}
         </SheetContent>
       </Sheet>
       <Dialog open={dialogOpen} modal={true} onOpenChange={setDialogOpen}>
-        <DialogTrigger>Open</DialogTrigger>
         <DialogContent className="md:min-w-[750px] lg:min-w-[900px]">
           <DialogHeader>
             <SheetTitle>Edit Employee</SheetTitle>
             {dialogOpen && selectedEmployeeId && (
-              <UpdateEmployeeForm
+              <UpdateEmployee
                 employeeId={selectedEmployeeId}
                 className="mb-2 mt-4 grid grid-cols-1 gap-x-8 gap-y-2 md:grid-cols-2 lg:grid-cols-3"
               />

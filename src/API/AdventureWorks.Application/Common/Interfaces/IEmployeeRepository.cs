@@ -9,5 +9,8 @@ public interface IEmployeeRepository
     Task<Employee?> GetEmployeeAsync(int businessEntityId, CancellationToken cancellationToken);
     Task<Employee?> GetEmployeeAsync(string nationalIdNumber, CancellationToken cancellationToken);
     Task<GetEmployeesQueryResponse> GetEmployeesAsync(GetEmployeesFilter filter, CancellationToken cancellationToken);
-    Task<bool> UpdateEmployeeAsync(Employee employee, CancellationToken cancellationToken);
+
+    Task<bool> UpdateEmployeeAsync(Employee existingEmployee, Employee updatedEmployee,
+        CancellationToken cancellationToken);
+    Task<List<Department>> GetDepartmentsAsync(CancellationToken cancellationToken);
 }
