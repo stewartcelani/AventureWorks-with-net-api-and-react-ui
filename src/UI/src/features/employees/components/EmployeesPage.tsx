@@ -9,7 +9,6 @@ import { Route as EmployeesRoute, type EmployeesSearchParams } from '@routes/emp
 import { Route as EmployeeRoute } from '@routes/employees.$employeeId.index';
 import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { formatDate } from '@/lib/dates';
 import { Input } from '@/components/ui/input';
 import {  DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
@@ -35,16 +34,16 @@ export default function EmployeesPage() {
   useEffect(() => {
     const debouncedSearch = debounce(() => {
       void navigate({
-        search: { page: page, pageSize: pageSize, searchTerm: inputValue }
+        search: { page: 1, pageSize: pageSize, searchTerm: inputValue }
       });
     }, 300);
 
-    debouncedSearch();
+    if (inputValue.trim().length > 0) debouncedSearch();
 
     return () => {
       debouncedSearch.cancel();
     };
-  }, [inputValue, navigate, pageSize, page]);
+  }, [inputValue, navigate, pageSize]);
 
   return (
     <>

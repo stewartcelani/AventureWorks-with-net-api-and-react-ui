@@ -12,6 +12,8 @@ import { getEmployeeQueryOptions } from '@features/employees/queries/getEmployee
 import { Route as EmployeeRoute } from '@routes/employees.$employeeId.index';
 import { Route as EmployeesRoute } from '@routes/employees.index.tsx';
 import { getEmployeeDepartmentsQueryOptions } from '@features/employees/queries/getEmployeeDepartments.ts';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@components/ui/tabs.tsx';
+import EmployeeDepartmentHistory from '@features/employees/components/EmployeeDepartmentHistory.tsx';
 
 export default function EmployeePage() {
   const { employeeId } = EmployeeRoute.useParams();
@@ -44,11 +46,23 @@ export default function EmployeePage() {
         </div>
         <div></div>
       </div>
-      <UpdateEmployeeForm
-        employee={employee}
-        departments={departments}
-        className="my-6 grid grid-cols-1 gap-x-8 gap-y-2 md:grid-cols-2 lg:grid-cols-3"
-      />
+      <Tabs defaultValue="details">
+        <TabsList>
+          <TabsTrigger value="details">Details</TabsTrigger>
+          <TabsTrigger value="history">History</TabsTrigger>
+        </TabsList>
+        <TabsContent value="details">
+          <UpdateEmployeeForm
+            employee={employee}
+            departments={departments}
+            className="my-6 grid grid-cols-1 gap-x-8 gap-y-2 md:grid-cols-2 lg:grid-cols-3"
+          />
+        </TabsContent>
+        <TabsContent value="history">
+          <EmployeeDepartmentHistory employeeId={employeeIdNumber} className="my-6" />
+        </TabsContent>
+      </Tabs>
+
     </>
   );
 }

@@ -22,6 +22,12 @@ public static class ApiEndpoints
             public static string UrlFor(string nationalIdNumber) => Url.Replace("{nationalIdNumber}", nationalIdNumber);
         }
         
+        public static class GetEmployeeDepartmentHistory
+        {
+            public const string Url = EmployeesBase + "/{businessEntityId}/department-history";
+            public static string UrlFor(int businessEntityId) => Url.Replace("{businessEntityId}", businessEntityId.ToString());
+        }
+        
         public static class GetEmployees
         {
             public const string Url = EmployeesBase;
@@ -31,6 +37,8 @@ public static class ApiEndpoints
         {
             public const string Url = EmployeesBase + "/departments";
         }
+
+        
     }
     
     public static class Products

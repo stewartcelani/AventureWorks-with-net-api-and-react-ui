@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
-import { EmployeeDepartment, employeeDepartmentSchema } from '@features/employees/types/employee.ts';
 import { getAuthenticatedApiClient } from '@lib/apiClient.ts';
+import { EmployeeDepartment, employeeDepartmentSchema } from '../types/employeeDepartment';
 
 export async function getEmployeeDepartments(): Promise<EmployeeDepartment[]> {
   const apiClient = await getAuthenticatedApiClient();

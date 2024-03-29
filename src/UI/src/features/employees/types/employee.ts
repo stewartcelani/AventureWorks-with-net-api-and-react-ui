@@ -1,10 +1,5 @@
 import { z } from 'zod';
-
-export const employeeDepartmentSchema = z.object({
-  departmentID: z.number(),
-  name: z.string(),
-  groupName: z.string()
-});
+import { employeeDepartmentSchema } from '@features/employees/types/employeeDepartment.ts';
 
 export const employeeSchema = z.object({
   businessEntityID: z.number(),
@@ -29,5 +24,4 @@ export const employeeSchema = z.object({
   department: employeeDepartmentSchema
 });
 
-export type EmployeeDepartment = z.infer<typeof employeeDepartmentSchema>;
 export type Employee = z.infer<typeof employeeSchema>;

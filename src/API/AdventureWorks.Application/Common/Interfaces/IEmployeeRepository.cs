@@ -13,4 +13,5 @@ public interface IEmployeeRepository
     Task<bool> UpdateEmployeeAsync(Employee existingEmployee, Employee updatedEmployee,
         CancellationToken cancellationToken);
     Task<List<Department>> GetDepartmentsAsync(CancellationToken cancellationToken);
+    Task<List<DepartmentHistory>> GetEmployeeDepartmentHistoryAsync(int businessEntityId, CancellationToken cancellationToken);
 }

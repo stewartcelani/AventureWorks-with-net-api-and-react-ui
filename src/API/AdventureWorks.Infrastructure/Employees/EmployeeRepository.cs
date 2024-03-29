@@ -234,5 +234,23 @@ public class EmployeeRepository(ConnectionStrings connectionStrings, IDbConnecti
         return departments;
     }
 
+    public async Task<List<DepartmentHistory>> GetEmployeeDepartmentHistoryAsync(int businessEntityId, CancellationToken cancellationToken)
+    {
+        const string query = @"
+            SELECT
+                D.DepartmentID,
+                D.Name,
+                D.GroupName,
+                EDH.StartDate,
+                EDH.EndDate
+            FROM HumanResources.EmployeeDepartmentHistory EDH
+            INNER JOIN HumanResources.Department D ON D.DepartmentID = EDH.DepartmentID
+            WHERE EDH.BusinessEntityID = @BusinessEntityID
+            ORDER BY EDH.StartDate ASC, EDH.ModifiedDate ASC";
+        using var connection = _dbConnectionFactory.CreateConnection(_connectionStrings.AdventureWorks);
+        var departmentHistories = (await connection.QueryAsync<DepartmentHistory>(new CommandDefinition(query, new { BusinessEntityID = businessEntityId }, cancellationToken: cancellationToken))).ToList();
+        return departmentHistories;
+    }
+
     #endregion
 }

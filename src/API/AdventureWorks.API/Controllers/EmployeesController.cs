@@ -3,6 +3,7 @@ using AdventureWorks.Application.Employees.Commands.UpdateEmployee;
 using AdventureWorks.Application.Employees.Queries.GetDepartments;
 using AdventureWorks.Application.Employees.Queries.GetEmployeeById;
 using AdventureWorks.Application.Employees.Queries.GetEmployeeByNationalIdNumber;
+using AdventureWorks.Application.Employees.Queries.GetEmployeeDepartmentHistory;
 using AdventureWorks.Application.Employees.Queries.GetEmployees;
 using AdventureWorks.Contracts.v1;
 using AdventureWorks.Contracts.v1.Employees.Requests;
@@ -46,6 +47,14 @@ public class EmployeesController(ISender mediator) : ControllerBase
         var result = await _mediator.Send(new GetEmployeeByNationalIdNumberQuery(nationalIdNumber, HttpContext.ToExecutionContext()), cancellationToken);
         if (result.IsError) return result.FirstError.ToActionResult();
         return result.Value is null ? NotFound() : Ok(result.Value.ToEmployeeResponse());
+    }
+    
+    [Authorize(Roles = AuthConstants.Roles.Employees.Read)]
+    [HttpGet(ApiEndpoints.Employees.GetEmployeeDepartmentHistory.Url, Name = nameof(GetEmployeeDepartmentHistory))]
+    public async Task<IActionResult> GetEmployeeDepartmentHistory(int businessEntityID, CancellationToken cancellationToken = default)
+    {
+        var result = await _mediator.Send(new GetEmployeeDepartmentHistoryQuery(businessEntityID, HttpContext.ToExecutionContext()), cancellationToken);
+        return result.IsError ? result.FirstError.ToActionResult() : Ok(result.Value.Select(x => x.ToEmployeeDepartmentHistoryResponse()));
     }
     
     [Authorize(Roles = AuthConstants.Roles.Employees.Read)]
