@@ -10,9 +10,11 @@ public static class GetProductsRequestMapper
     {
         return new GetProductsFilter
         {
+            SearchTerm = string.IsNullOrWhiteSpace(request.SearchTerm) ? null : "%" + request.SearchTerm + "%",
             Page = request.Page,
             PageSize = request.PageSize,
             IncludeTotalCount = request.IncludeTotalCount,
+            OrderBy = GetProductsFilterOrderBy.FromName(request.OrderBy.ToString()),
             OrderByOperator = OrderByOperator.FromValue(request.OrderByOperator.ToString())
         };
     }

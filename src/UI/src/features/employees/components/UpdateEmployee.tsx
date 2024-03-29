@@ -20,7 +20,7 @@ import {
   FormMessage
 } from '@components/ui/form.tsx';
 import { Input } from '@components/ui/input.tsx';
-import type { Employee, EmployeeDepartment } from '@features/employees/types/employee.ts';
+import type { Employee } from '@features/employees/types/employee.ts';
 import {
   Select,
   SelectContent,
@@ -39,6 +39,7 @@ import {
 import { z } from "zod";
 import { format } from 'date-fns';
 import { useGetEmployeeDepartmentsQuery } from '@features/employees/queries/getEmployeeDepartments.ts';
+import type { EmployeeDepartment } from '@features/employees/types/employeeDepartment.ts';
 
 type UpdateEmployeeProps = {
   employeeId: number;

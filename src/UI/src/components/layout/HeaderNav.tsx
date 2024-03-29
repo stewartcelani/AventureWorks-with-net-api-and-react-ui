@@ -39,7 +39,10 @@ export default function HeaderNav({ className, ...props }: HTMLAttributes<HTMLEl
             )}
             search={{
               page: defaultGetProductsRequest.page,
-              pageSize: defaultGetProductsRequest.pageSize
+              pageSize: defaultGetProductsRequest.pageSize,
+              orderBy: defaultGetProductsRequest.orderBy,
+              orderByOperator: defaultGetProductsRequest.orderByOperator,
+              searchTerm: defaultGetProductsRequest.searchTerm
             }}
           >
             Products

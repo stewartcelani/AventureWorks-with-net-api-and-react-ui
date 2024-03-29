@@ -10,7 +10,7 @@ public static class GetEmployeesRequestMapper
     {
         return new GetEmployeesFilter
         {
-            SearchTerm = "%" + request.SearchTerm + "%",
+            SearchTerm = string.IsNullOrWhiteSpace(request.SearchTerm) ? null : "%" + request.SearchTerm + "%",
             Page = request.Page,
             PageSize = request.PageSize,
             IncludeTotalCount = request.IncludeTotalCount,

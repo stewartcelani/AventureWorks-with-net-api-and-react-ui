@@ -38,7 +38,7 @@ export default function EmployeesPage() {
       });
     }, 300);
 
-    if (inputValue.trim().length > 0) debouncedSearch();
+    if (inputValue.trim() != searchTerm) debouncedSearch();
 
     return () => {
       debouncedSearch.cancel();
@@ -126,8 +126,11 @@ export default function EmployeesPage() {
               <TableCell className="hidden lg:table-cell">{employee.hireDate.toLocaleDateString()}</TableCell>
               <TableCell className="text-right">
                 <DropdownMenu>
-                  <DropdownMenuTrigger>
-                    <EllipsisVertical />
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" className="h8 w-8 p-0">
+                      <span className="sr-only">Open menu</span>
+                      <EllipsisVertical className="h-5 w-5" />
+                    </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent>
                     <DropdownMenuItem

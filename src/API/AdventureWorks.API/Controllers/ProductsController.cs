@@ -17,7 +17,7 @@ namespace AdventureWorks.API.Controllers;
 [RequiredScope(RequiredScopesConfigurationKey = "AzureAdSettings:Scopes")]
 public class ProductsController(ISender mediator) : ControllerBase
 {
-    private readonly ISender _mediator = mediator;
+    private readonly ISender _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
 
     [Authorize(Roles = AuthConstants.Roles.Products.Read)]
     [HttpGet(ApiEndpoints.Products.GetProductById.Url, Name = nameof(GetProductById))]

@@ -19,7 +19,7 @@ export default function EmployeeDepartmentHistory({ employeeId, ...props}: Emplo
 
   return (
     <div {...props}>
-      <Table className="lg:w-[800px]">
+      <Table>
         <TableCaption>{!employeeDepartmentHistory || employeeDepartmentHistory.length === 0 ? 'No department history found' : ''}</TableCaption>
         <TableHeader>
           <TableRow>

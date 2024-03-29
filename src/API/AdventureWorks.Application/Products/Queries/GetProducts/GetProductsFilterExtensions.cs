@@ -8,7 +8,7 @@ public static class GetProductsFilterExtensions
             {SelectQuery}
             {FromQuery}
             {filter.BuildWhereQuery()}
-            ORDER BY P.ProductID
+            ORDER BY {filter.OrderBy.Value} {filter.OrderByOperator.Value}
             OFFSET @Offset ROWS FETCH NEXT @PageSize ROWS ONLY";
         return getQuery;
     }
@@ -54,12 +54,18 @@ public static class GetProductsFilterExtensions
 
     private static string BuildWhereQuery(this GetProductsFilter filter)
     {
-        var whereQuery = "WHERE 1 = 1 ";
+        var whereQuery = "WHERE 1 = 1 AND P.ListPrice > 0 "; // TODO: REMOVE HARDCODING OF LISTPRICE > 0, NEEDED WHILE DEVELOPING FRONT-END
         
         if (filter.ProductID.HasValue)
         {
             whereQuery += "AND P.ProductID = @ProductID ";
         }
+        
+        if (!string.IsNullOrWhiteSpace(filter.SearchTerm))
+        {
+            whereQuery += "AND (P.Name LIKE @SearchTerm OR P.ProductNumber LIKE @SearchTerm) ";
+        }
+        
         
         return whereQuery;
     }

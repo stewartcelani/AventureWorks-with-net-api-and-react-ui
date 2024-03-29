@@ -5,7 +5,7 @@ meta {
 }
 
 get {
-  url: https://localhost:8000/api/v1/products?page=1&pageSize=10&includeTotalCount=true
+  url: https://localhost:8000/api/v1/products?page=1&pageSize=10&includeTotalCount=true&orderBy=productid&orderByOperator=ASC&searchTerm=SA-M198
   body: none
   auth: none
 }
@@ -14,4 +14,7 @@ query {
   page: 1
   pageSize: 10
   includeTotalCount: true
+  orderBy: productid
+  orderByOperator: ASC
+  searchTerm: SA-M198
 }

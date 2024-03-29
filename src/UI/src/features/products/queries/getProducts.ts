@@ -10,28 +10,37 @@ export type ProductsResponse = PagedResponse<Product>;
 export type GetProductsRequest = {
   page: number;
   pageSize: number;
+  orderBy: 'productID' | 'name' | 'productNumber' | 'makeFlag' | 'finishedGoodsFlag' | 'model' | 'productCategory' | 'productSubcategory' | 'color' | 'safetyStockLevel' | 'reorderPoint' | 'inventory' | 'standardCost' | 'listPrice' | 'size' | 'sizeUnitMeasureCode' | 'weightUnitMeasureCode' | 'weight' | 'daysToManufacture';
+  orderByOperator: 'asc' | 'desc';
+  searchTerm: string;
 };
 
 export const defaultGetProductsRequest: GetProductsRequest = {
   page: 1,
-  pageSize: 10
+  pageSize: 10,
+  orderBy: 'productID',
+  orderByOperator: 'asc',
+  searchTerm: ''
 };
 
 export async function getProducts({
   page,
-  pageSize
+  pageSize,
+  orderBy,
+  orderByOperator,
+  searchTerm
 }: GetProductsRequest = defaultGetProductsRequest): Promise<ProductsResponse> {
   const apiClient = await getAuthenticatedApiClient();
-  const response = await apiClient.get(`products?page=${page}&pageSize=${pageSize}`);
+  const response = await apiClient.get(`products?page=${page}&pageSize=${pageSize}&orderBy=${orderBy}&orderByOperator=${orderByOperator}&searchTerm=${searchTerm}`);
   const data = await response.json();
   return productsResponseSchema.parse(data);
 }
 
-export const getProductsQueryOptions = ({ page, pageSize }: GetProductsRequest = defaultGetProductsRequest) => ({
-  queryKey: ['getProducts', page, pageSize],
-  queryFn: () => getProducts({ page, pageSize })
+export const getProductsQueryOptions = ({ page, pageSize, orderBy, orderByOperator, searchTerm }: GetProductsRequest = defaultGetProductsRequest) => ({
+  queryKey: ['products', page, pageSize, orderBy, orderByOperator, searchTerm],
+  queryFn: () => getProducts({ page, pageSize, orderBy, orderByOperator, searchTerm })
 });
 
-export function useGetProductsQuery({ page, pageSize }: GetProductsRequest = defaultGetProductsRequest) {
-  return useQuery(getProductsQueryOptions({ page, pageSize }));
+export function useGetProductsQuery({ page, pageSize, orderBy, orderByOperator, searchTerm }: GetProductsRequest = defaultGetProductsRequest) {
+  return useQuery(getProductsQueryOptions({ page, pageSize, orderBy, orderByOperator, searchTerm }));
 }

@@ -1,3 +1,4 @@
+using AdventureWorks.Application.Common.Domain;
 using AdventureWorks.Application.Common.Interfaces;
 using AdventureWorks.Application.Common.Settings;
 using AdventureWorks.Application.Products.Queries.GetProducts;
