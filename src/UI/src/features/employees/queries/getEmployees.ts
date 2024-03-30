@@ -15,7 +15,7 @@ export type GetEmployeesRequest = {
 
 export const defaultGetEmployeesRequest: GetEmployeesRequest = {
   page: 1,
-  pageSize: 10,
+  pageSize: 15,
   searchTerm: ''
 };
 

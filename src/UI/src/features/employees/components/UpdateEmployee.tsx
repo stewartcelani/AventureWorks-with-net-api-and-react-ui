@@ -204,7 +204,6 @@ export function UpdateEmployeeForm({ employee, departments, className, ...props 
                     placeholder={employee.loginID}
                     {...field}
                     disabled={mutation.isPending || form.formState.isSubmitting}
-                    autoFocus
                   />
                 </FormControl>
                 <FormDescription></FormDescription>
@@ -336,7 +335,7 @@ export function UpdateEmployeeForm({ employee, departments, className, ...props 
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Martial Status</FormLabel>
-                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                <Select onValueChange={field.onChange} defaultValue={field.value} disabled={mutation.isPending || form.formState.isSubmitting}>
                   <FormControl>
                     <SelectTrigger>
                       <SelectValue placeholder="Select marital status" />
@@ -358,7 +357,7 @@ export function UpdateEmployeeForm({ employee, departments, className, ...props 
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Gender</FormLabel>
-                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                <Select onValueChange={field.onChange} defaultValue={field.value} disabled={mutation.isPending || form.formState.isSubmitting}>
                   <FormControl>
                     <SelectTrigger>
                       <SelectValue placeholder="Select gender" />
@@ -380,7 +379,7 @@ export function UpdateEmployeeForm({ employee, departments, className, ...props 
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Department</FormLabel>
-                <Select onValueChange={field.onChange} defaultValue={field.value.toString()}>
+                <Select onValueChange={field.onChange} defaultValue={field.value.toString()} disabled={mutation.isPending || form.formState.isSubmitting}>
                   <FormControl>
                     <SelectTrigger>
                       <SelectValue placeholder="Select department" />
@@ -451,7 +450,7 @@ export function UpdateEmployeeForm({ employee, departments, className, ...props 
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Salaried</FormLabel>
-                <Select onValueChange={field.onChange} defaultValue={field.value.toString()}>
+                <Select onValueChange={field.onChange} defaultValue={field.value.toString()} disabled={mutation.isPending || form.formState.isSubmitting}>
                   <FormControl>
                     <SelectTrigger>
                       <SelectValue placeholder="Select" />
@@ -473,7 +472,7 @@ export function UpdateEmployeeForm({ employee, departments, className, ...props 
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Current</FormLabel>
-                <Select onValueChange={field.onChange} defaultValue={field.value.toString()}>
+                <Select onValueChange={field.onChange} defaultValue={field.value.toString()} disabled={mutation.isPending || form.formState.isSubmitting}>
                   <FormControl>
                     <SelectTrigger>
                       <SelectValue placeholder="Select" />

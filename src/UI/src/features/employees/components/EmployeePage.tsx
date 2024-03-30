@@ -16,9 +16,9 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@components/ui/tabs.ts
 import EmployeeDepartmentHistory from '@features/employees/components/EmployeeDepartmentHistory.tsx';
 
 export default function EmployeePage() {
-  const { employeeId } = EmployeeRoute.useParams();
-  const employeeIdNumber = Number(employeeId);
-  const { data: employee } = useSuspenseQuery(getEmployeeQueryOptions(employeeIdNumber));
+  const { employeeId: employeeIdString } = EmployeeRoute.useParams();
+  const employeeId = Number(employeeIdString);
+  const { data: employee } = useSuspenseQuery(getEmployeeQueryOptions(employeeId));
   const { data: departments } = useSuspenseQuery(getEmployeeDepartmentsQueryOptions());
 
   return (
@@ -59,7 +59,7 @@ export default function EmployeePage() {
           />
         </TabsContent>
         <TabsContent value="history">
-          <EmployeeDepartmentHistory employeeId={employeeIdNumber} className="my-6" />
+          <EmployeeDepartmentHistory employeeId={employeeId} className="my-6" />
         </TabsContent>
       </Tabs>
 

@@ -1,6 +1,13 @@
 import { Link, useNavigate } from '@tanstack/react-router';
 import { useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
-import { EllipsisVertical, RefreshCcw, User, X } from 'lucide-react';
+import { RefreshCcw, User, X } from 'lucide-react';
+import {
+  DotsHorizontalIcon,
+  ChevronLeftIcon,
+  ChevronRightIcon,
+  DoubleArrowLeftIcon,
+  DoubleArrowRightIcon
+} from '@radix-ui/react-icons';
 import { debounce } from 'lodash';
 import { useEffect, useRef, useState } from 'react';
 
@@ -10,7 +17,12 @@ import { Route as EmployeeRoute } from '@routes/employees.$employeeId.index';
 import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Input } from '@/components/ui/input';
-import {  DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger
+} from '@/components/ui/dropdown-menu';
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
 import { Dialog, DialogContent, DialogHeader } from '@/components/ui/dialog';
 import UpdateEmployee from '@features/employees/components/UpdateEmployee.tsx';
@@ -54,7 +66,7 @@ export default function EmployeesPage() {
         </div>
         <div></div>
       </div>
-      <div className="flex items-center justify-end space-x-2">
+      <div className="flex items-center justify-end space-x-2 pb-4">
         <div className="flex-1 space-x-2">
           <div className="relative w-[250px] sm:w-[350px]">
             <Input
@@ -96,109 +108,149 @@ export default function EmployeesPage() {
           </Button>
         </div>
       </div>
-      <Table>
-        <TableCaption>{data.items.length === 0 ? 'No employees found' : ''}</TableCaption>
-        <TableHeader>
-          <TableRow>
-            <TableHead className="w-[250px]">Name</TableHead>
-            <TableHead className="hidden sm:table-cell">Role</TableHead>
-            <TableHead className="hidden md:table-cell">Department</TableHead>
-            <TableHead className="hidden lg:table-cell">Unit</TableHead>
-            <TableHead className="hidden lg:table-cell">Hire Date</TableHead>
-            <TableHead className="text-right"></TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data.items.map((employee) => (
-            <TableRow key={employee.businessEntityID}>
-              <TableCell className="font-medium">
-                <Link
-                  className="hover:underline"
-                  to={EmployeeRoute.to}
-                  params={{ employeeId: `${employee.businessEntityID}` }}
-                >
-                  {`${employee.firstName} ${employee.lastName}`}
-                </Link>
-              </TableCell>
-              <TableCell className="hidden sm:table-cell">{employee.jobTitle}</TableCell>
-              <TableCell className="hidden md:table-cell">{employee.department.name}</TableCell>
-              <TableCell className="hidden lg:table-cell">{employee.department.groupName}</TableCell>
-              <TableCell className="hidden lg:table-cell">{employee.hireDate.toLocaleDateString()}</TableCell>
-              <TableCell className="text-right">
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" className="h8 w-8 p-0">
-                      <span className="sr-only">Open menu</span>
-                      <EllipsisVertical className="h-5 w-5" />
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent>
-                    <DropdownMenuItem
-                      className="text-md h-10 cursor-pointer"
-                      onClick={() => {
-                        setSheetSide('right');
-                        setSheetOpen(true);
-                        setSelectedEmployeeId(employee.businessEntityID);
-                      }}
-                    >
-                      <User className="mr-2 size-4" />
-                      <span>Edit (right)</span>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem
-                      className="text-md h-10 cursor-pointer"
-                      onClick={() => {
-                        setSheetSide('top');
-                        setSheetOpen(true);
-                        setSelectedEmployeeId(employee.businessEntityID);
-                      }}
-                    >
-                      <User className="mr-2 size-4" />
-                      <span>Edit (top)</span>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem
-                      className="text-md h-10 cursor-pointer"
-                      onClick={() => {
-                        setSheetSide('bottom');
-                        setSheetOpen(true);
-                        setSelectedEmployeeId(employee.businessEntityID);
-                      }}
-                    >
-                      <User className="mr-2 size-4" />
-                      <span>Edit (bottom)</span>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem
-                      className="text-md h-10 cursor-pointer"
-                      onClick={() => {
-                        setSheetSide('left');
-                        setSheetOpen(true);
-                        setSelectedEmployeeId(employee.businessEntityID);
-                      }}
-                    >
-                      <User className="mr-2 size-4" />
-                      <span>Edit (left)</span>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem
-                      className="text-md h-10 cursor-pointer"
-                      onClick={() => {
-                        setDialogOpen(true);
-                        setSelectedEmployeeId(employee.businessEntityID);
-                      }}
-                    >
-                      <User className="mr-2 size-4" />
-                      <span>Edit (modal)</span>
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </TableCell>
+      <div className="rounded-md border" style={{ marginTop: 0 }}
+           onWheel={(event) => {
+             if (event.deltaY > 0) {
+               if (data.hasNextPage) {
+                 void navigate({
+                   search: (prev: EmployeesSearchParams) => ({
+                     page: prev.page + 1,
+                     pageSize: pageSize,
+                     searchTerm: searchTerm
+                   })
+                 });
+               }
+             } else if (event.deltaY < 0) {
+               if (page > 1) {
+                 void navigate({
+                   search: (prev: EmployeesSearchParams) => ({
+                     page: prev.page - 1,
+                     pageSize: pageSize,
+                     searchTerm: searchTerm
+                   })
+                 });
+               }
+             }
+           }}
+      >
+        <Table>
+          {data.items.length === 0 && <TableCaption className="pt-6 pb-10">No employees found.</TableCaption>}
+          <TableHeader>
+            <TableRow>
+              <TableHead className="w-[250px] p2 pl-4">Name</TableHead>
+              <TableHead className="hidden sm:table-cell p-2">Role</TableHead>
+              <TableHead className="hidden md:table-cell p-2">Department</TableHead>
+              <TableHead className="hidden lg:table-cell p-2">Unit</TableHead>
+              <TableHead className="hidden lg:table-cell p-2">Hire Date</TableHead>
+              <TableHead className="text-right p-2"></TableHead>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-      <div className="flex items-center justify-end">
+          </TableHeader>
+          <TableBody>
+            {data.items.map((employee) => (
+              <TableRow key={employee.businessEntityID}>
+                <TableCell className="font-medium p-2 pl-4">
+                  <Link
+                    className="hover:underline"
+                    to={EmployeeRoute.to}
+                    params={{ employeeId: `${employee.businessEntityID}` }}
+                  >
+                    {`${employee.firstName} ${employee.lastName}`}
+                  </Link>
+                </TableCell>
+                <TableCell className="hidden sm:table-cell p-1">{employee.jobTitle}</TableCell>
+                <TableCell className="hidden md:table-cell p-1">{employee.department.name}</TableCell>
+                <TableCell className="hidden lg:table-cell p-1">{employee.department.groupName}</TableCell>
+                <TableCell className="hidden lg:table-cell p-1">{employee.hireDate.toLocaleDateString()}</TableCell>
+                <TableCell className="text-right p-1">
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="ghost" className="h8 w-8 p-0">
+                        <span className="sr-only">Open menu</span>
+                        <DotsHorizontalIcon className="h-4 w-4" />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent>
+                      <DropdownMenuItem
+                        className="text-md h-10 cursor-pointer"
+                        onClick={() => {
+                          setSheetSide('right');
+                          setSheetOpen(true);
+                          setSelectedEmployeeId(employee.businessEntityID);
+                        }}
+                      >
+                        <User className="mr-2 size-4" />
+                        <span>Edit (right)</span>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem
+                        className="text-md h-10 cursor-pointer"
+                        onClick={() => {
+                          setSheetSide('top');
+                          setSheetOpen(true);
+                          setSelectedEmployeeId(employee.businessEntityID);
+                        }}
+                      >
+                        <User className="mr-2 size-4" />
+                        <span>Edit (top)</span>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem
+                        className="text-md h-10 cursor-pointer"
+                        onClick={() => {
+                          setSheetSide('bottom');
+                          setSheetOpen(true);
+                          setSelectedEmployeeId(employee.businessEntityID);
+                        }}
+                      >
+                        <User className="mr-2 size-4" />
+                        <span>Edit (bottom)</span>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem
+                        className="text-md h-10 cursor-pointer"
+                        onClick={() => {
+                          setSheetSide('left');
+                          setSheetOpen(true);
+                          setSelectedEmployeeId(employee.businessEntityID);
+                        }}
+                      >
+                        <User className="mr-2 size-4" />
+                        <span>Edit (left)</span>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem
+                        className="text-md h-10 cursor-pointer"
+                        onClick={() => {
+                          setDialogOpen(true);
+                          setSelectedEmployeeId(employee.businessEntityID);
+                        }}
+                      >
+                        <User className="mr-2 size-4" />
+                        <span>Edit (modal)</span>
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
+      <div className="flex items-end justify-between pt-4" style={{ marginTop: 0 }}>
         <div className="flex-1 text-sm text-muted-foreground">
-          {data.totalCount} {data.totalCount && data.totalCount > 1 ? 'employees' : 'employee'}
+          Showing <strong>{(page - 1) * pageSize + 1}-{data.totalCount ? Math.min(page * pageSize, data.totalCount) : page * pageSize}</strong> of <strong>{data.totalCount ?? '-'}</strong> employees
         </div>
         <div className="space-x-2">
+          <Link
+            from={EmployeesRoute.fullPath}
+            disabled={page === 1}
+            search={() => ({
+              page: 1,
+              pageSize: pageSize,
+              searchTerm: searchTerm
+            })}
+          >
+            <Button variant="outline" size="sm" disabled={page === 1}>
+              <span className="sr-only">Go to first page</span>
+              <DoubleArrowLeftIcon className="h-4 w-4" />
+            </Button>
+          </Link>
           <Link
             from={EmployeesRoute.fullPath}
             disabled={page === 1}
@@ -209,7 +261,8 @@ export default function EmployeesPage() {
             })}
           >
             <Button variant="outline" size="sm" disabled={page === 1}>
-              Prev
+              <span className="sr-only">Go to previous page</span>
+              <ChevronLeftIcon className="h-4 w-4" />
             </Button>
           </Link>
           <Link
@@ -222,10 +275,26 @@ export default function EmployeesPage() {
             })}
           >
             <Button variant="outline" size="sm" disabled={!data.hasNextPage}>
-              Next
+              <span className="sr-only">Go to next page</span>
+              <ChevronRightIcon className="h-4 w-4" />
+            </Button>
+          </Link>
+          <Link
+            from={EmployeesRoute.fullPath}
+            disabled={!data.hasNextPage}
+            search={() => ({
+              page: data.totalCount ? Math.ceil(data.totalCount / pageSize) : page,
+              pageSize: pageSize,
+              searchTerm: searchTerm
+            })}
+          >
+            <Button variant="outline" size="sm" disabled={!data.hasNextPage}>
+              <span className="sr-only">Go to last page</span>
+              <DoubleArrowRightIcon className="h-4 w-4" />
             </Button>
           </Link>
         </div>
+
       </div>
       <Sheet open={sheetOpen} modal={true} onOpenChange={setSheetOpen}>
         <SheetContent side={sheetSide} className="pr-1">
@@ -233,7 +302,8 @@ export default function EmployeesPage() {
             <SheetTitle>Edit Employee</SheetTitle>
           </SheetHeader>
           {sheetOpen && selectedEmployeeId && (
-            <UpdateEmployee employeeId={selectedEmployeeId} className="mb-5 space-y-5 pr-4" style={{overflowY: 'auto', maxHeight: 'calc(100vh - 160px)'}}/>
+            <UpdateEmployee employeeId={selectedEmployeeId} className="mb-5 space-y-5 pr-4"
+                            style={{ overflowY: 'auto', maxHeight: 'calc(100vh - 160px)' }} />
           )}
         </SheetContent>
       </Sheet>

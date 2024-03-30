@@ -1,6 +1,11 @@
 import { ColumnDef } from '@tanstack/react-table';
-import { ArrowUpDown, EllipsisVertical, PackageSearch } from 'lucide-react';
+import { PackageSearch } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import {
+  ArrowDownIcon,
+  ArrowUpIcon,
+  DotsHorizontalIcon,
+} from '@radix-ui/react-icons';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -8,7 +13,9 @@ import {
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
 
+import { Route as ProductRoute } from '@routes/products.$productId.index.tsx';
 import type { Product } from '@features/products/types/product.ts';
+import { Link } from '@tanstack/react-router';
 
 export const productColumns: ColumnDef<Product>[] = [
   {
@@ -19,34 +26,20 @@ export const productColumns: ColumnDef<Product>[] = [
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
         >
-          ID
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      );
-    },
-    accessorKey: 'productID',
-    cell: ({ row }) => {
-      const { productID } = row.original;
-      return <div className="pl-2">{productID}</div>;
-    }
-  },
-  {
-    header: ({ column }) => {
-      return (
-        <Button
-          className="pl-2 pr-2"
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-        >
           Name
-          <ArrowUpDown className="ml-2 h-4 w-4" />
+          {column.getIsSorted() === 'asc' && <ArrowUpIcon className="ml-2 h-4 w-4" />}
+          {column.getIsSorted() === 'desc' && <ArrowDownIcon className="ml-2 h-4 w-4" />}
         </Button>
       );
     },
     accessorKey: 'name',
     cell: ({ row }) => {
-      const { name } = row.original;
-      return <div className="pl-2">{name}</div>;
+      const { name, productID } = row.original;
+      return <div className="pl-2 font-medium">
+        <Link className="hover:underline" to={ProductRoute.to} params={{ productId: `${productID}`}}>
+          {name}
+        </Link>
+      </div>;
     }
   },
   {
@@ -58,7 +51,8 @@ export const productColumns: ColumnDef<Product>[] = [
           onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
         >
           Product Number
-          <ArrowUpDown className="ml-2 h-4 w-4" />
+          {column.getIsSorted() === 'asc' && <ArrowUpIcon className="ml-2 h-4 w-4" />}
+          {column.getIsSorted() === 'desc' && <ArrowDownIcon className="ml-2 h-4 w-4" />}
         </Button>
       );
     },
@@ -66,6 +60,26 @@ export const productColumns: ColumnDef<Product>[] = [
     cell: ({ row }) => {
       const { productNumber } = row.original;
       return <div className="pl-2">{productNumber}</div>;
+    }
+  },
+  {
+    header: ({ column }) => {
+      return (
+        <Button
+          className="pl-2 pr-2"
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+        >
+          Category
+          {column.getIsSorted() === 'asc' && <ArrowUpIcon className="ml-2 h-4 w-4" />}
+          {column.getIsSorted() === 'desc' && <ArrowDownIcon className="ml-2 h-4 w-4" />}
+        </Button>
+      );
+    },
+    accessorKey: 'productCategory',
+    cell: ({ row }) => {
+      const { productCategory } = row.original;
+      return <div className="pl-2">{productCategory}</div>;
     }
   },
   {
@@ -80,7 +94,8 @@ export const productColumns: ColumnDef<Product>[] = [
             onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
           >
             Cost Price
-            <ArrowUpDown className="ml-2 h-4 w-4" />
+            {column.getIsSorted() === 'asc' && <ArrowUpIcon className="ml-2 h-4 w-4" />}
+            {column.getIsSorted() === 'desc' && <ArrowDownIcon className="ml-2 h-4 w-4" />}
           </Button>
         </div>
       );
@@ -105,7 +120,8 @@ export const productColumns: ColumnDef<Product>[] = [
             onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
           >
             Retail Price
-            <ArrowUpDown className="ml-2 h-4 w-4" />
+            {column.getIsSorted() === 'asc' && <ArrowUpIcon className="ml-2 h-4 w-4" />}
+            {column.getIsSorted() === 'desc' && <ArrowDownIcon className="ml-2 h-4 w-4" />}
           </Button>
         </div>
       );
@@ -129,7 +145,7 @@ export const productColumns: ColumnDef<Product>[] = [
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="h8 w-8 p-0">
               <span className="sr-only">Open menu</span>
-              <EllipsisVertical className="h-5 w-5" />
+              <DotsHorizontalIcon className="h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">

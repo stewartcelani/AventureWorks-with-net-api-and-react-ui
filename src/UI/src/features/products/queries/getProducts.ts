@@ -17,8 +17,8 @@ export type GetProductsRequest = {
 
 export const defaultGetProductsRequest: GetProductsRequest = {
   page: 1,
-  pageSize: 10,
-  orderBy: 'productID',
+  pageSize: 15,
+  orderBy: 'name',
   orderByOperator: 'asc',
   searchTerm: ''
 };
