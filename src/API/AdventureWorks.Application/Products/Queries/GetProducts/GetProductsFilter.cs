@@ -10,7 +10,8 @@ public class GetProductsFilter : PagedFilter
     public GetProductsFilterOrderBy OrderBy { get; init; } = GetProductsFilterOrderBy.ProductID;
     public bool IncludeTotalCount { get; init; } = false;
     public int? ProductID { get; init; }
-    
+    public List<int>? CategoryIDs { get; init; } = null;
+
 }
 
 public class GetProductsFilterOrderBy(string name, string value)
@@ -27,7 +28,7 @@ public class GetProductsFilterOrderBy(string name, string value)
     public static readonly GetProductsFilterOrderBy Color = new(nameof(Product.Color), "P.Color");
     public static readonly GetProductsFilterOrderBy SafetyStockLevel = new(nameof(Product.SafetyStockLevel), "P.SafetyStockLevel");
     public static readonly GetProductsFilterOrderBy ReorderPoint = new(nameof(Product.ReorderPoint), "P.ReorderPoint");
-    /*public static readonly GetProductsFilterOrderBy Inventory = new(nameof(Product.Inventory), "Inventory");*/ // TODO: How to order by a SUM
+    public static readonly GetProductsFilterOrderBy Inventory = new(nameof(Product.Inventory), "(SELECT SUM(Quantity) FROM Production.ProductInventory WHERE ProductID = P.ProductID)");
     public static readonly GetProductsFilterOrderBy StandardCost = new(nameof(Product.StandardCost), "P.StandardCost");
     public static readonly GetProductsFilterOrderBy ListPrice = new(nameof(Product.ListPrice), "P.ListPrice");
     public static readonly GetProductsFilterOrderBy Size = new(nameof(Product.Size), "P.Size");

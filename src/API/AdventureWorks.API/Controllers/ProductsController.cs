@@ -32,8 +32,8 @@ public class ProductsController(ISender mediator) : ControllerBase
     [HttpGet(ApiEndpoints.Products.GetProducts.Url, Name = nameof(GetProducts))]
     public async Task<IActionResult> GetProducts([FromQuery] GetProductsRequest request, CancellationToken cancellationToken = default)
     {
-        /*var randomDelay = new Random().Next(0, 350);
-        await Task.Delay(randomDelay, cancellationToken);*/
+        var randomDelay = new Random().Next(0, 350);
+        await Task.Delay(randomDelay, cancellationToken);
         var filter = request.ToGetProductsFilter();
         var result = await _mediator.Send(new GetProductsQuery(filter, HttpContext.ToExecutionContext()), cancellationToken);
         return result.IsError ? result.FirstError.ToActionResult() : Ok(result.Value.ToPagedResponse(filter.Page, filter.PageSize));

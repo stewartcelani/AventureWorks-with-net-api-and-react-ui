@@ -9,7 +9,7 @@ import {
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuItem,
+  DropdownMenuItem, DropdownMenuLabel,
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
 
@@ -136,6 +136,28 @@ export const productColumns: ColumnDef<Product>[] = [
     }
   },
   {
+    accessorKey: 'inventory',
+    header: ({ column }) => {
+      return (
+        <div className="flex justify-end">
+          <Button
+            variant="ghost"
+            className="pl-2 pr-2"
+            onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+          >
+            Inventory
+            {column.getIsSorted() === 'asc' && <ArrowUpIcon className="ml-2 h-4 w-4" />}
+            {column.getIsSorted() === 'desc' && <ArrowDownIcon className="ml-2 h-4 w-4" />}
+          </Button>
+        </div>
+      );
+    },
+    cell: ({ row }) => {
+      const { inventory } = row.original;
+      return <div className="pr-2 text-right">{inventory}</div>;
+    }
+  },
+  {
     id: 'actions',
     cell: ({ row }) => {
       const { productID } = row.original;
@@ -149,6 +171,7 @@ export const productColumns: ColumnDef<Product>[] = [
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
+            <DropdownMenuLabel className="text-md">Actions</DropdownMenuLabel>
             <DropdownMenuItem
               className="text-md h-10 cursor-pointer"
               onClick={() => console.log(`navigate to product ${productID} here`)}>

@@ -11,6 +11,7 @@ public static class GetProductsRequestMapper
         return new GetProductsFilter
         {
             SearchTerm = string.IsNullOrWhiteSpace(request.SearchTerm) ? null : "%" + request.SearchTerm + "%",
+            CategoryIDs = request.CategoryIds,
             Page = request.Page,
             PageSize = request.PageSize,
             IncludeTotalCount = request.IncludeTotalCount,

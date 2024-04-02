@@ -20,7 +20,7 @@ import { Input } from '@/components/ui/input';
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuItem,
+  DropdownMenuItem, DropdownMenuLabel,
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
@@ -170,6 +170,7 @@ export default function EmployeesPage() {
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent>
+                      <DropdownMenuLabel className="text-md">Actions</DropdownMenuLabel>
                       <DropdownMenuItem
                         className="text-md h-10 cursor-pointer"
                         onClick={() => {

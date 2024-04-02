@@ -6,7 +6,7 @@ import {
   ChevronLeftIcon,
   ChevronRightIcon,
   DoubleArrowLeftIcon,
-  DoubleArrowRightIcon
+  DoubleArrowRightIcon, PlusCircledIcon
 } from '@radix-ui/react-icons';
 import {
   flexRender,
@@ -23,7 +23,26 @@ import { Button } from '@components/ui/button.tsx';
 import { useNavigate } from '@tanstack/react-router';
 import { useEffect, useRef, useState } from 'react';
 import { debounce } from 'lodash';
-import { RefreshCcw, X } from 'lucide-react';
+import { CheckIcon, RefreshCcw, X } from 'lucide-react';
+import { Popover, PopoverContent, PopoverTrigger } from '@components/ui/popover.tsx';
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList, CommandSeparator
+} from '@components/ui/command.tsx';
+import { cn } from '@utils';
+import { Separator } from '@components/ui/separator.tsx';
+import { Badge } from '@/components/ui/badge';
+
+const categories = [
+  {id: 1, name: 'Bikes'},
+  {id: 2, name: 'Components'},
+  {id: 3, name: 'Clothing'},
+  {id: 4, name: 'Accessories'},
+];
 
 export default function ProductsPage() {
   const navigate = useNavigate();
@@ -47,6 +66,19 @@ export default function ProductsPage() {
   }]);
   const searchRef = useRef<HTMLInputElement>(null);
   const [searchValue, setSearchValue] = useState(searchTerm || '');
+
+  const [selectedCategories, setSelectedCategories] = useState<Set<number>>(new Set());
+  const toggleCategory = (categoryId: number) => {
+    setSelectedCategories((prevSet) => {
+      const newSet = new Set(prevSet);
+      if (newSet.has(categoryId)) {
+        newSet.delete(categoryId);
+      } else {
+        newSet.add(categoryId);
+      }
+      return newSet;
+    });
+  };
 
 
   const table = useReactTable({
@@ -117,8 +149,8 @@ export default function ProductsPage() {
         <div></div>
       </div>
       <div>
-        <div className="flex items-center pb-4">
-          <div className="flex-1">
+        <div className="flex items-center justify-between pb-4">
+          <div className="flex items-center space-x-2">
             <div className="relative w-[250px] sm:w-[350px]">
               <Input
                 ref={searchRef}
@@ -143,6 +175,91 @@ export default function ProductsPage() {
                 />
               )}
             </div>
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button variant="outline" size="sm" className="h-[40px] border-dashed">
+                  <PlusCircledIcon className="mr-2 h-4 w-4" />
+                  Category
+                  {selectedCategories?.size > 0 && (
+                    <>
+                      <Separator orientation="vertical" className="mx-2 h-4" />
+                      <Badge
+                        variant="secondary"
+                        className="rounded-sm px-1 font-normal lg:hidden"
+                      >
+                        {selectedCategories.size}
+                      </Badge>
+                      <div className="hidden space-x-1 lg:flex">
+                        {selectedCategories.size > 2 ? (
+                          <Badge
+                            variant="secondary"
+                            className="rounded-sm px-1 font-normal"
+                          >
+                            {selectedCategories.size} selected
+                          </Badge>
+                        ) : (
+                          categories
+                            .filter((category) => selectedCategories.has(category.id))
+                            .map((category) => (
+                              <Badge
+                                variant="secondary"
+                                key={category.id}
+                                className="rounded-sm px-1 font-normal"
+                              >
+                                {category.name}
+                              </Badge>
+                            ))
+                        )}
+                      </div>
+                    </>
+                  )}
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent align="start" className="w-[200px] p-0">
+                <Command>
+                  <CommandInput placeholder="Category" />
+                  <CommandList>
+                    <CommandEmpty>No results found.</CommandEmpty>
+                    <CommandGroup>
+                      {categories.map((category) => {
+                        const isSelected = selectedCategories.has(category.id);
+                        return (
+                          <CommandItem
+                            key={category.id}
+                            onSelect={() => toggleCategory(category.id)}
+                          >
+                            <div
+                              className={cn(
+                                'mr-2 flex h-4 w-4 items-center justify-center rounded-sm border border-primary',
+                                isSelected
+                                  ? 'bg-primary text-primary-foreground'
+                                  : 'opacity-50 [&_svg]:invisible'
+                              )}
+                            >
+                              <CheckIcon className={cn('h-4 w-4')} />
+                            </div>
+                            <span>{category.name}</span>
+                          </CommandItem>
+                        );
+                      })}
+                    </CommandGroup>
+                    {selectedCategories.size > 0 && (
+                      <>
+                        <CommandSeparator />
+                        <CommandGroup>
+                          <CommandItem
+                            onSelect={() => setSelectedCategories(new Set<number>())}
+                            className="justify-center text-center"
+                          >
+                            Clear filters
+                          </CommandItem>
+                        </CommandGroup>
+                      </>
+                    )}
+                  </CommandList>
+                </Command>
+              </PopoverContent>
+            </Popover>
           </div>
           <div className="space-x-2">
             <Button

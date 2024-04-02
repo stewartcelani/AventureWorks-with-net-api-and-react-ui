@@ -48,13 +48,12 @@ public static class GetProductsFilterExtensions
         FROM Production.Product P
         LEFT JOIN Production.ProductModel PM ON PM.ProductModelID = P.ProductModelID
         LEFT JOIN Production.ProductSubcategory PSC ON PSC.ProductSubcategoryID = P.ProductSubcategoryID
-        LEFT JOIN Production.ProductCategory PC ON PC.ProductCategoryID = PSC.ProductCategoryID
-        LEFT JOIN Purchasing.ProductVendor PV ON PV.ProductID = P.ProductID";
+        LEFT JOIN Production.ProductCategory PC ON PC.ProductCategoryID = PSC.ProductCategoryID";
     
 
     private static string BuildWhereQuery(this GetProductsFilter filter)
     {
-        var whereQuery = "WHERE 1 = 1 AND P.ListPrice > 0 "; // TODO: REMOVE HARDCODING OF LISTPRICE > 0, NEEDED WHILE DEVELOPING FRONT-END
+        var whereQuery = "WHERE 1 = 1 ";
         
         if (filter.ProductID.HasValue)
         {
@@ -64,6 +63,11 @@ public static class GetProductsFilterExtensions
         if (!string.IsNullOrWhiteSpace(filter.SearchTerm))
         {
             whereQuery += "AND (P.Name LIKE @SearchTerm OR P.ProductNumber LIKE @SearchTerm) ";
+        }
+        
+        if (filter.CategoryIDs is { Count: > 0 })
+        {
+            whereQuery += "AND PC.ProductCategoryID IN @CategoryIDs ";
         }
         
         
