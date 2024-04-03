@@ -37,7 +37,7 @@ import { cn } from '@utils';
 import { Separator } from '@components/ui/separator.tsx';
 import { Badge } from '@/components/ui/badge';
 
-const categories = [
+const filterCategories = [
   {id: 1, name: 'Bikes'},
   {id: 2, name: 'Components'},
   {id: 3, name: 'Clothing'},
@@ -47,13 +47,14 @@ const categories = [
 export default function ProductsPage() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const { page, pageSize, orderBy, orderByOperator, searchTerm } = ProductsRoute.useSearch();
+  const { page, pageSize, orderBy, orderByOperator, searchTerm, categories } = ProductsRoute.useSearch();
   const { data: productsResponse, isFetching } = useSuspenseQuery(getProductsQueryOptions({
     page,
     pageSize,
     orderBy,
     orderByOperator,
-    searchTerm
+    searchTerm,
+    categories
   }));
 
   const [pagination, setPagination] = useState<PaginationState>({
@@ -67,18 +68,23 @@ export default function ProductsPage() {
   const searchRef = useRef<HTMLInputElement>(null);
   const [searchValue, setSearchValue] = useState(searchTerm || '');
 
-  const [selectedCategories, setSelectedCategories] = useState<Set<number>>(new Set());
   const toggleCategory = (categoryId: number) => {
-    setSelectedCategories((prevSet) => {
-      const newSet = new Set(prevSet);
-      if (newSet.has(categoryId)) {
-        newSet.delete(categoryId);
-      } else {
-        newSet.add(categoryId);
-      }
-      return newSet;
-    });
+    if (categories.includes(categoryId)) {
+      void navigate({
+        search: { page: 1, pageSize, searchTerm, orderBy, orderByOperator, categories: categories.filter((c) => c !== categoryId) }
+      });
+    } else {
+      void navigate({
+        search: { page: 1, pageSize, searchTerm, orderBy, orderByOperator, categories: [...categories, categoryId] }
+      });
+    }
   };
+
+  const clearCategoryFilter = () => {
+    void navigate({
+      search: { page: 1, pageSize, searchTerm, orderBy, orderByOperator, categories: [] }
+    });
+  }
 
 
   const table = useReactTable({
@@ -108,7 +114,7 @@ export default function ProductsPage() {
   useEffect(() => {
     const debouncedSearch = debounce(() => {
       void navigate({
-        search: { page: 1, pageSize: pageSize, searchTerm: searchValue, orderBy, orderByOperator }
+        search: { page: 1, pageSize: pageSize, searchTerm: searchValue, orderBy, orderByOperator, categories }
       });
       table.setPageIndex(0);
     }, 300);
@@ -124,6 +130,7 @@ export default function ProductsPage() {
           pageSize: pagination.pageSize,
           orderBy: sorting[0].id,
           orderByOperator: sorting[0].desc ? 'desc' : 'asc',
+          categories,
           searchTerm
         }
       });
@@ -136,7 +143,7 @@ export default function ProductsPage() {
     };
 
 
-  }, [pagination, sorting, searchValue, navigate]);
+  }, [pagination, sorting, searchValue, categories, navigate]);
 
 
   return (
@@ -180,26 +187,26 @@ export default function ProductsPage() {
                 <Button variant="outline" size="sm" className="h-[40px] border-dashed">
                   <PlusCircledIcon className="mr-2 h-4 w-4" />
                   Category
-                  {selectedCategories?.size > 0 && (
+                  {categories?.length > 0 && (
                     <>
                       <Separator orientation="vertical" className="mx-2 h-4" />
                       <Badge
                         variant="secondary"
                         className="rounded-sm px-1 font-normal lg:hidden"
                       >
-                        {selectedCategories.size}
+                        {categories.length}
                       </Badge>
                       <div className="hidden space-x-1 lg:flex">
-                        {selectedCategories.size > 2 ? (
+                        {categories.length > 2 ? (
                           <Badge
                             variant="secondary"
                             className="rounded-sm px-1 font-normal"
                           >
-                            {selectedCategories.size} selected
+                            {categories.length} selected
                           </Badge>
                         ) : (
-                          categories
-                            .filter((category) => selectedCategories.has(category.id))
+                          filterCategories
+                            .filter((category) => categories.includes(category.id))
                             .map((category) => (
                               <Badge
                                 variant="secondary"
@@ -221,8 +228,8 @@ export default function ProductsPage() {
                   <CommandList>
                     <CommandEmpty>No results found.</CommandEmpty>
                     <CommandGroup>
-                      {categories.map((category) => {
-                        const isSelected = selectedCategories.has(category.id);
+                      {filterCategories.map((category) => {
+                        const isSelected = categories.includes(category.id);
                         return (
                           <CommandItem
                             key={category.id}
@@ -243,12 +250,12 @@ export default function ProductsPage() {
                         );
                       })}
                     </CommandGroup>
-                    {selectedCategories.size > 0 && (
+                    {categories.length > 0 && (
                       <>
                         <CommandSeparator />
                         <CommandGroup>
                           <CommandItem
-                            onSelect={() => setSelectedCategories(new Set<number>())}
+                            onSelect={clearCategoryFilter}
                             className="justify-center text-center"
                           >
                             Clear filters
@@ -268,7 +275,7 @@ export default function ProductsPage() {
               disabled={isFetching}
               onClick={() => {
                 void queryClient.refetchQueries({
-                  queryKey: getProductsQueryOptions({ page, pageSize, orderBy, orderByOperator, searchTerm }).queryKey
+                  queryKey: getProductsQueryOptions({ page, pageSize, orderBy, orderByOperator, searchTerm, categories }).queryKey
                 });
               }}
             >

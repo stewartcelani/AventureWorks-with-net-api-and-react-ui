@@ -13,6 +13,7 @@ export type GetProductsRequest = {
   orderBy: 'productID' | 'name' | 'productNumber' | 'makeFlag' | 'finishedGoodsFlag' | 'model' | 'productCategory' | 'productSubcategory' | 'color' | 'safetyStockLevel' | 'reorderPoint' | 'inventory' | 'standardCost' | 'listPrice' | 'size' | 'sizeUnitMeasureCode' | 'weightUnitMeasureCode' | 'weight' | 'daysToManufacture';
   orderByOperator: 'asc' | 'desc';
   searchTerm: string;
+  categories: number[];
 };
 
 export const defaultGetProductsRequest: GetProductsRequest = {
@@ -20,7 +21,8 @@ export const defaultGetProductsRequest: GetProductsRequest = {
   pageSize: 15,
   orderBy: 'name',
   orderByOperator: 'asc',
-  searchTerm: ''
+  searchTerm: '',
+  categories: []
 };
 
 export async function getProducts({
@@ -28,19 +30,24 @@ export async function getProducts({
   pageSize,
   orderBy,
   orderByOperator,
-  searchTerm
+  searchTerm,
+  categories
 }: GetProductsRequest = defaultGetProductsRequest): Promise<ProductsResponse> {
   const apiClient = await getAuthenticatedApiClient();
-  const response = await apiClient.get(`products?page=${page}&pageSize=${pageSize}&orderBy=${orderBy}&orderByOperator=${orderByOperator}&searchTerm=${searchTerm}`);
+  let url = `products?page=${page}&pageSize=${pageSize}&orderBy=${orderBy}&orderByOperator=${orderByOperator}&searchTerm=${searchTerm}`;
+  if (categories.length > 0) {
+    url += `&categories=${categories.join(',')}`;
+  }
+  const response = await apiClient.get(url);
   const data = await response.json();
   return productsResponseSchema.parse(data);
 }
 
-export const getProductsQueryOptions = ({ page, pageSize, orderBy, orderByOperator, searchTerm }: GetProductsRequest = defaultGetProductsRequest) => ({
-  queryKey: ['products', page, pageSize, orderBy, orderByOperator, searchTerm],
-  queryFn: () => getProducts({ page, pageSize, orderBy, orderByOperator, searchTerm })
+export const getProductsQueryOptions = ({ page, pageSize, orderBy, orderByOperator, searchTerm, categories }: GetProductsRequest = defaultGetProductsRequest) => ({
+  queryKey: ['products', page, pageSize, orderBy, orderByOperator, searchTerm, categories],
+  queryFn: () => getProducts({ page, pageSize, orderBy, orderByOperator, searchTerm, categories })
 });
 
-export function useGetProductsQuery({ page, pageSize, orderBy, orderByOperator, searchTerm }: GetProductsRequest = defaultGetProductsRequest) {
-  return useQuery(getProductsQueryOptions({ page, pageSize, orderBy, orderByOperator, searchTerm }));
+export function useGetProductsQuery({ page, pageSize, orderBy, orderByOperator, searchTerm, categories }: GetProductsRequest = defaultGetProductsRequest) {
+  return useQuery(getProductsQueryOptions({ page, pageSize, orderBy, orderByOperator, searchTerm, categories }));
 }

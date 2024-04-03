@@ -36,7 +36,8 @@ export const getEmployeesQueryOptions = ({
   searchTerm
 }: GetEmployeesRequest = defaultGetEmployeesRequest) => ({
   queryKey: ['employees', page, pageSize, searchTerm],
-  queryFn: () => getEmployees({ page, pageSize, searchTerm })
+  queryFn: () => getEmployees({ page, pageSize, searchTerm }),
+  staleTime: 1000 * 30
 });
 
 export function useGetEmployeesQuery({ page, pageSize, searchTerm }: GetEmployeesRequest = defaultGetEmployeesRequest) {

@@ -33,17 +33,11 @@ export default function HeaderNav({ className, ...props }: HTMLAttributes<HTMLEl
         <AuthorizeView role={appRoles.productsRead}>
           <Link
             to={ProductsRoute.to}
+            search={defaultGetProductsRequest}
             className={cn(
               'text-md px-1.5 font-medium transition-colors',
               pathname.startsWith('/products/') ? 'text-primary' : 'text-muted-foreground hover:text-foreground/90'
             )}
-            search={{
-              page: defaultGetProductsRequest.page,
-              pageSize: defaultGetProductsRequest.pageSize,
-              orderBy: defaultGetProductsRequest.orderBy,
-              orderByOperator: defaultGetProductsRequest.orderByOperator,
-              searchTerm: defaultGetProductsRequest.searchTerm
-            }}
           >
             Products
           </Link>
@@ -51,15 +45,11 @@ export default function HeaderNav({ className, ...props }: HTMLAttributes<HTMLEl
         <AuthorizeView role={appRoles.employeesRead}>
           <Link
             to={EmployeeRoute.to}
+            search={defaultGetEmployeesRequest}
             className={cn(
               'text-md px-1.5 font-medium transition-colors',
               pathname.startsWith('/employees/') ? 'text-primary' : 'text-muted-foreground hover:text-foreground/90'
             )}
-            search={{
-              page: defaultGetEmployeesRequest.page,
-              pageSize: defaultGetEmployeesRequest.pageSize,
-              searchTerm: defaultGetEmployeesRequest.searchTerm
-            }}
           >
             Employees
           </Link>

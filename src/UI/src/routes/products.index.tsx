@@ -11,7 +11,8 @@ const productsSearchSchema = z.object({
   pageSize: z.number().max(100).catch(defaultGetProductsRequest.pageSize),
   orderBy: z.enum(['productID', 'name', 'productNumber', 'makeFlag', 'finishedGoodsFlag', 'model', 'productCategory', 'productSubcategory', 'color', 'safetyStockLevel', 'reorderPoint', 'inventory', 'standardCost', 'listPrice', 'size', 'sizeUnitMeasureCode', 'weightUnitMeasureCode', 'weight', 'daysToManufacture']).catch(defaultGetProductsRequest.orderBy),
   orderByOperator: z.enum(['asc', 'desc']).catch(defaultGetProductsRequest.orderByOperator),
-  searchTerm: z.string().catch(defaultGetProductsRequest.searchTerm)
+  searchTerm: z.string().catch(defaultGetProductsRequest.searchTerm),
+  categories: z.array(z.number()).catch(defaultGetProductsRequest.categories),
 });
 
 export type ProductsSearchParams = z.infer<typeof productsSearchSchema>;
@@ -23,12 +24,11 @@ export const Route = createFileRoute('/products/')({
     }
   },
   validateSearch: productsSearchSchema,
-  loaderDeps: ({ search: { page, pageSize, orderBy, orderByOperator, searchTerm } }) => ({ page, pageSize, orderBy, orderByOperator, searchTerm }),
-  loader: ({ context: { queryClient }, deps: { page, pageSize, orderBy, orderByOperator, searchTerm } }) =>
-    queryClient.ensureQueryData(getProductsQueryOptions({ page, pageSize, orderBy, orderByOperator, searchTerm })),
+  loaderDeps: ({ search: { page, pageSize, orderBy, orderByOperator, searchTerm, categories } }) => ({ page, pageSize, orderBy, orderByOperator, searchTerm, categories }),
+  loader: ({ context: { queryClient }, deps: { page, pageSize, orderBy, orderByOperator, searchTerm, categories } }) => queryClient.ensureQueryData(getProductsQueryOptions({ page, pageSize, orderBy, orderByOperator, searchTerm, categories })),
   onError: ({ error }) => {
     console.error(error);
   },
   errorComponent: RouteErrorComponent,
-  pendingComponent: TopLoadingBarComponent
+  /*pendingComponent: TopLoadingBarComponent*/
 });
