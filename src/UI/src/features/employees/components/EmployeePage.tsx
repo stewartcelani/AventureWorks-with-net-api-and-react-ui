@@ -14,6 +14,9 @@ import { Route as EmployeesRoute } from '@routes/employees.index.tsx';
 import { getEmployeeDepartmentsQueryOptions } from '@features/employees/queries/getEmployeeDepartments.ts';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@components/ui/tabs.tsx';
 import EmployeeDepartmentHistory from '@features/employees/components/EmployeeDepartmentHistory.tsx';
+import { Link } from '@tanstack/react-router';
+import { Route as IndexRoute } from '@/routes';
+import { defaultGetEmployeesRequest } from '@features/employees/queries/getEmployees.ts';
 
 export default function EmployeePage() {
   const { employeeId: employeeIdString } = EmployeeRoute.useParams();
@@ -26,7 +29,17 @@ export default function EmployeePage() {
       <Breadcrumb>
         <BreadcrumbList>
           <BreadcrumbItem>
-            <BreadcrumbLink href={EmployeesRoute.to}>Employees</BreadcrumbLink>
+            <BreadcrumbLink>
+              <Link to={IndexRoute.to}>
+                Dashboard
+              </Link>
+            </BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>
+            <BreadcrumbLink>
+              <Link to={EmployeesRoute.to} search={defaultGetEmployeesRequest}>Employees</Link>
+            </BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>

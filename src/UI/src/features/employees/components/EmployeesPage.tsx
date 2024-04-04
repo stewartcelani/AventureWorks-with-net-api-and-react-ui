@@ -11,7 +11,7 @@ import {
 import { debounce } from 'lodash';
 import { useEffect, useRef, useState } from 'react';
 
-import { getEmployeesQueryOptions } from '@features/employees/queries/getEmployees.ts';
+import { defaultGetEmployeesRequest, getEmployeesQueryOptions } from '@features/employees/queries/getEmployees.ts';
 import { Route as EmployeesRoute, type EmployeesSearchParams } from '@routes/employees.index.tsx';
 import { Route as EmployeeRoute } from '@routes/employees.$employeeId.index';
 import { Button } from '@/components/ui/button';
@@ -26,6 +26,16 @@ import {
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
 import { Dialog, DialogContent, DialogHeader } from '@/components/ui/dialog';
 import UpdateEmployee from '@features/employees/components/UpdateEmployee.tsx';
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator
+} from '@components/ui/breadcrumb.tsx';
+import { Route as IndexRoute } from '@/routes';
+import { Route as ProductsRoute } from '@routes/products.index.tsx';
+import { defaultGetProductsRequest } from '@features/products/queries/getProducts.ts';
 
 export default function EmployeesPage() {
   const queryClient = useQueryClient();
@@ -59,6 +69,21 @@ export default function EmployeesPage() {
 
   return (
     <>
+      <Breadcrumb>
+        <BreadcrumbList>
+          <BreadcrumbItem>
+            <Link to={IndexRoute.to}>
+              Dashboard
+            </Link>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>
+            <BreadcrumbPage>
+              Employees
+            </BreadcrumbPage>
+          </BreadcrumbItem>
+        </BreadcrumbList>
+      </Breadcrumb>
       <div className="flex items-center justify-end space-y-0.5">
         <div className="flex-1">
           <h2 className="text-3xl font-bold tracking-tight">Employees</h2>

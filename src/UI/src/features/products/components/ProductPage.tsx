@@ -10,6 +10,9 @@ import {
   BreadcrumbSeparator
 } from '@components/ui/breadcrumb.tsx';
 import { Route as ProductsRoute } from '@routes/products.index.tsx';
+import { Link, useRouter } from '@tanstack/react-router';
+import { Route as IndexRoute } from '@/routes';
+import { defaultGetProductsRequest } from '@features/products/queries/getProducts.ts';
 
 export default function ProductPage() {
   const { productId: productIdString } = ProductRoute.useParams();
@@ -21,7 +24,13 @@ export default function ProductPage() {
       <Breadcrumb>
         <BreadcrumbList>
           <BreadcrumbItem>
-            <BreadcrumbLink href={ProductsRoute.to}>Products</BreadcrumbLink>
+            <Link to={IndexRoute.to}>
+              Dashboard
+            </Link>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>
+            <Link to={ProductsRoute.to} search={defaultGetProductsRequest}>Products</Link>
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>

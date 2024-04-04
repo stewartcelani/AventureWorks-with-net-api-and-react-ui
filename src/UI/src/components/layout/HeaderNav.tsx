@@ -20,7 +20,7 @@ export default function HeaderNav({ className, ...props }: HTMLAttributes<HTMLEl
       <nav className={cn('flex items-center space-x-4 lg:space-x-6', className)} {...props}>
         <Link
           to={IndexRoute.to}
-          className="text-md px-1.5 font-medium transition-colors"
+          className="text-sm px-1.5 font-medium transition-colors"
           activeProps={{
             className: 'text-primary'
           }}
@@ -35,7 +35,7 @@ export default function HeaderNav({ className, ...props }: HTMLAttributes<HTMLEl
             to={ProductsRoute.to}
             search={defaultGetProductsRequest}
             className={cn(
-              'text-md px-1.5 font-medium transition-colors',
+              'text-sm px-1.5 font-medium transition-colors',
               pathname.startsWith('/products/') ? 'text-primary' : 'text-muted-foreground hover:text-foreground/90'
             )}
           >
@@ -47,7 +47,7 @@ export default function HeaderNav({ className, ...props }: HTMLAttributes<HTMLEl
             to={EmployeeRoute.to}
             search={defaultGetEmployeesRequest}
             className={cn(
-              'text-md px-1.5 font-medium transition-colors',
+              'text-sm px-1.5 font-medium transition-colors',
               pathname.startsWith('/employees/') ? 'text-primary' : 'text-muted-foreground hover:text-foreground/90'
             )}
           >
@@ -57,7 +57,7 @@ export default function HeaderNav({ className, ...props }: HTMLAttributes<HTMLEl
         <Link
           to={SettingsClaimsRoute.to}
           className={cn(
-            'text-md px-1.5 font-medium transition-colors',
+            'text-sm px-1.5 font-medium transition-colors',
             pathname.startsWith('/settings/') ? 'text-primary' : 'text-muted-foreground hover:text-foreground/90'
           )}
         >

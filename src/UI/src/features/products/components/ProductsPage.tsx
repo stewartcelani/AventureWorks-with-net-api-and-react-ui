@@ -1,6 +1,6 @@
 import { productColumns } from '@features/products/components/ProductColumns.tsx';
 import { useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
-import { getProductsQueryOptions } from '@features/products/queries/getProducts.ts';
+import { defaultGetProductsRequest, getProductsQueryOptions } from '@features/products/queries/getProducts.ts';
 import { Route as ProductsRoute } from '@routes/products.index.tsx';
 import {
   ChevronLeftIcon,
@@ -20,7 +20,7 @@ import {
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@components/ui/table.tsx';
 import { Input } from '@/components/ui/input';
 import { Button } from '@components/ui/button.tsx';
-import { useNavigate } from '@tanstack/react-router';
+import { Link, useNavigate } from '@tanstack/react-router';
 import { useEffect, useRef, useState } from 'react';
 import { debounce } from 'lodash';
 import { CheckIcon, RefreshCcw, X } from 'lucide-react';
@@ -36,6 +36,16 @@ import {
 import { cn } from '@utils';
 import { Separator } from '@components/ui/separator.tsx';
 import { Badge } from '@/components/ui/badge';
+import { Card, CardContent, CardDescription, CardHeader } from '@/components/ui/card';
+import { Route as IndexRoute } from '@/routes';
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator
+} from '@components/ui/breadcrumb.tsx';
 
 const filterCategories = [
   {id: 1, name: 'Bikes'},
@@ -148,7 +158,24 @@ export default function ProductsPage() {
 
   return (
     <>
-      <div className="flex items-center justify-end space-y-0.5">
+      <Breadcrumb>
+        <BreadcrumbList>
+          <BreadcrumbItem>
+            <BreadcrumbLink>
+              <Link to={IndexRoute.to}>
+                Dashboard
+              </Link>
+            </BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>
+            <BreadcrumbPage>
+              Products
+            </BreadcrumbPage>
+          </BreadcrumbItem>
+        </BreadcrumbList>
+      </Breadcrumb>
+      <div className="flex items-center justify-end space-y-0.5 w-[300px] rounded-md text-card-foreground">
         <div className="flex-1">
           <h2 className="text-3xl font-bold tracking-tight">Products</h2>
           <p className="flex-1 text-muted-foreground">View and manage products.</p>
@@ -158,7 +185,7 @@ export default function ProductsPage() {
       <div>
         <div className="flex items-center justify-between pb-4">
           <div className="flex items-center space-x-2">
-            <div className="relative w-[250px] sm:w-[350px]">
+            <div className="relative w-[200px] sm:w-[300px]">
               <Input
                 ref={searchRef}
                 placeholder="Search products"
@@ -166,7 +193,7 @@ export default function ProductsPage() {
                 onChange={(e) => {
                   setSearchValue(e.target.value);
                 }}
-                className="w-[250px] sm:w-[350px]"
+                className="w-[200px] sm:w-[300px]"
               />
               {searchValue.length > 0 && (
                 <X
@@ -284,7 +311,7 @@ export default function ProductsPage() {
           </div>
 
         </div>
-        <div className="rounded-md border">
+        <div className="rounded-md border bg-background">
           <Table
             onWheel={(event) => {
               if (event.deltaY > 0) {
